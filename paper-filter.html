@@ -1,0 +1,209 @@
+<!-- <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html"> add  to top with other imports  -->
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../object-hash/object-hash.html">
+<link rel="import" href="../jshashtable/js-hashtable.html">
+
+<dom-module id='paper-filter-on-fire'  > <!-- CONVERTED WIP , TODO: determine what to do with: id="paperFilterOnFire" -->
+
+  <style>
+  </style> <!-- TODO Move style tags here from <template> if needed CONVERTED WIP -->
+
+<template>
+<style>
+  :host {
+    max-height: 92px;
+    display: block;
+  }
+  paper-button {
+    background: #fff;
+    min-width: 172px;
+    margin: 0px 2px 6px;
+  }
+  mini-badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: 100;
+    color: #FFF;
+    line-height: 1.2;
+    class="vertical-align:" baseline;   <!-- class="vertical-align:"  // TODO cleanup class= if needed  CONVERTED WIP  --> 
+    white-space: class="nowrap;"   <!-- class="nowrap;"  // TODO cleanup class= if needed  CONVERTED WIP  --> 
+    text-align: class="center;"   <!-- class="center;"  // TODO cleanup class= if needed  CONVERTED WIP  --> 
+    background-color: #6F6F6F;
+    border-radius: 10px;
+  } 
+</style>
+  <template is="dom-repeat" items="{{data}}"  ="{{x in show | justProperties(data, by)}}">
+      <!-- TODO fix repeat, replace data, remove extra ="{{key in keys}}"   CONVERTED WIP --> 
+    <paper-button raised="{{!x.filtered}}" on-tap="{{setFilter}}" filter="{{by}}" title="{{x.name}}"> <!-- TODO change on-tap="{{handleClick}}" to on-tap="handleClick"  CONVERTED WIP -->  
+      {{x.name}} <mini-badge>{{x.num}}</mini-badge> 
+    </paper-button>
+  </template>
+  <object-hash hash="{{hash}}"></object-hash>
+  <js-hashtable hashtable="{{hashtable}}"></js-hashtable>
+</template>
+
+<script>
+  function getArray(value,data,theArray) {
+    var is = [];
+    if (data[value].hasOwnProperty(theArray)) {
+      is = data[value][theArray];
+    }
+    return is;
+  }  
+  function isEmpty(obj) {
+    for(var prop in obj) {
+      if(obj.hasOwnProperty(prop)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function hasTypes (data,types) {
+    for (var key in types) {
+      if (types.hasOwnProperty(key)) {
+        var obj = types[key];
+        for (var prop in obj) {
+          if(obj.hasOwnProperty(prop)){
+            if (data.hasOwnProperty(key)) {
+              if (obj[prop]) {
+                if (data[key].indexOf(prop) === -1 ) {
+                  return false;
+                }
+              }
+            } else {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
+  }
+  Polymer({
+    is: 'paper-filter-on-fire', // CONVERTED WIP 
+    publish: {
+      filteredKeys: [],
+      show: []
+    },
+    dataChanged: function(oldValue, newValue) {
+//      this.filteredKeys = newValue;
+      this.filteredKeys = this.justOfTypes(newValue, this.filters);
+    },
+    ifFiltered: function(name, properties) { console.log('ifFiltered');
+      if (this.filters.hasOwnProperty(properties)) {
+        if (this.filters[properties].hasOwnProperty(name)) {
+          return this.filters[properties][name];
+          } else { 
+          return false;
+        }
+        } else {
+        return false;
+      }
+    },
+    setFilter: function(e) { console.log('setFilter');
+      if (e.currentTarget.attributes.hasOwnProperty('filter')){
+        if (e.currentTarget.attributes.filter.hasOwnProperty('value')) {
+          if (this.filters.hasOwnProperty(e.currentTarget.attributes.filter.value)) {
+	    delete this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value];
+          } else {
+            if (this.filters === undefined) { 
+              this.filters = {};
+            }
+            this.filters[e.currentTarget.attributes.filter.value] = {};
+            this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value] = true;
+          }
+          this.filteredKeys = this.justOfTypes(this.data, this.filters);
+        }
+      }
+    },
+    justProperties: function(data,properties){ console.log('justProperties');
+      var output = [];
+      var outputNum = [];
+      var value = Object.keys(data);
+
+      if (value !== undefined && value !== null && Array.isArray(value) && value.length > 0) {
+        
+        var test = function(entryA) {
+          if (output.indexOf(entryA) === -1){
+            output.push(entryA); 
+            outputNum.push( 1 );
+            } else {
+            outputNum[output.indexOf(entryA)]++;
+          }
+        };
+        for(var entry in value) {
+          getArray(value[entry], data, properties).forEach(test);
+        }
+      }
+      var result = [];
+      for (var i = 0, l = output.length; i < l; i++) {
+        result[i] = {name:output[i],num:outputNum[i],filtered:this.ifFiltered(output[i],properties)};
+      }
+      result.sort(function(a, b) {
+        return b.num - a.num;
+      })
+
+/*      if (result.length === 0) {
+        for(var prop in this.filters) {
+          for(var filter in this.filters[prop]) {
+            if (filter) {
+              result.push({name:filter});
+            }
+          }
+        }
+      }
+*/
+      
+      return result;
+    },
+    justOfTypes: function(value,data,types){ console.log('justOfTypes');
+      if (value === null) {
+        return null;
+      }
+      if (isEmpty(types)) {
+        return value;
+        } else {
+        var thisRunUid = this.hash({t:types,d:object.keys(data)});
+
+        if (this.hashtable.containsKey(thisRunUid)) {
+          debugger;
+          return this.hashtable.get(thisRunUid);
+        } else {
+          var output = [];
+          value.forEach(function(entry) {
+            if (hasTypes(data[entry],types)) {
+              output.push(entry); 
+            }
+          });
+          this.hashtable.put(thisRunUid, output);
+          return output;
+        } 
+      }
+    },
+    ready: function() { 
+      console.log('Filter Ready');
+    }
+  });
+</script>
+</dom-module> <!-- CONVERTED -->
+
+<!-- CONVERSION NOTES TODO:
+ Review code and look for: 
+ - textContent binding from <div>First: {{first}}</div> TO First <span>{{first}}</span><br>
+ - polymer-element default attributes such as tabindex="0" move to hostAttributes: {  tabindex: 0}
+ - custom elements correct JSON quotes required, change from <my-element foo="{ 'title': 'Persuasion', 'author': 'Austen' }"> to </my-element> to <my-element foo="{ "title": "Persuasion", "author": "Austen" }"></my-element>
+ - custom elements attribute use dash-case not camelCase, change from  <my-element fooBar= to <my-element foo-bar
+ - Polymer( fix mixins use Behaviors after is: see https://www.polymer-project.org/1.0/docs/devguide/behaviors.html
+ - Check layout attributes replaced by layout classes <div layout horizontal center>` to `<div class="layout horizontal center">, 
+ - Cleanup class= 
+ - Convert core- to iron- or paper- replacement elements at PolymerElements
+ - Remove unresolved from <body> tag
+ - Cleanup iron-ajax params url for embedded bindings {{}}
+ - iron-ajax replace this.$.xxx_ajax.abort(); and this.$.xxx_ajax.go(); with this.$.xxx_ajax.generateRequest() 
+ - Fix iron-list if needed 
+ - Fix indentation as need 
+ - Cleanup Comments to reflect changes ,
+ - see https://www.polymer-project.org/1.0/docs/migration.html
+   -->
