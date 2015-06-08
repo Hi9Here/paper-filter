@@ -1,9 +1,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../object-hash/object-hash.html">
-<link rel="import" href="../jshashtable/js-hashtable.html">
 
-<dom-module id='paper-filter-on-fire'  > <!-- CONVERTED WIP , TODO: determine what to do with: id="paperFilterOnFire" -->
+<dom-module id='paper-filter'  > 
 
   <style>
     :host {
@@ -30,13 +28,11 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{x}}"  ="{{justProperties(show, data, by)}}">
-    <paper-button raised="{{!x.filtered}}" on-tap="{{setFilter}}" filter="{{by}}" title="{{x.name}}"> <!-- TODO change on-tap="{{handleClick}}" to on-tap="handleClick"  CONVERTED WIP -->  
-      <span>{{x.name}}</span><mini-badge>{{x.num}}</mini-badge> 
+  <template is="dom-repeat" items="{{justProperties(show, data, by)}}">
+    <paper-button raised="{{!x.filtered}}" on-tap="setFilter" filter="{{by}}" title="{{x.name}}">
+      <span>{{x.name}}</span> <!-- <mini-badge>{{x.num}}</mini-badge> -->
     </paper-button>
   </template>
-  <object-hash hash="{{hash}}"></object-hash>
-  <js-hashtable hashtable="{{hashtable}}"></js-hashtable>
 </template>
 
 <script>
@@ -77,14 +73,30 @@
     return true;
   }
   Polymer({
-    is: 'paper-filter-on-fire', // CONVERTED WIP 
-    publish: {
-      filteredKeys: [],
+    is: 'paper-filter', // CONVERTED WIP 
+    properties: {
+      filters: {
+        type: Object,
+        computed: 'justProperties(data, by)'
+      },
+      data: {
+        type: Object
+      },
+      by: String,
+      filteredKeys: {
+        type: Array,
+        computed: 'justOfTypes(data, filters)'
+      },
       show: []
     },
-    dataChanged: function(oldValue, newValue) {
+    observers: [ 'dataChanged(data.*)' ],
+    dataChanged: function(newValue) {
 //      this.filteredKeys = newValue;
-      this.filteredKeys = this.justOfTypes(newValue, this.filters);
+//      this.filteredKeys = this.justOfTypes(newValue, this.filters);
+    },
+    hostAttributes: {
+      by: "type",
+      data: {}
     },
     ifFiltered: function(name, properties) { console.log('ifFiltered');
       if (this.filters.hasOwnProperty(properties)) {
@@ -160,21 +172,13 @@
       if (isEmpty(types)) {
         return value;
         } else {
-        var thisRunUid = this.hash({t:types,d:object.keys(data)});
-
-        if (this.hashtable.containsKey(thisRunUid)) {
-          debugger;
-          return this.hashtable.get(thisRunUid);
-        } else {
-          var output = [];
-          value.forEach(function(entry) {
-            if (hasTypes(data[entry],types)) {
-              output.push(entry); 
-            }
-          });
-          this.hashtable.put(thisRunUid, output);
-          return output;
-        } 
+        var output = [];
+        value.forEach(function(entry) {
+          if (hasTypes(data[entry],types)) {
+            output.push(entry); 
+          }
+        });
+        return output;
       }
     },
     ready: function() { 
@@ -187,7 +191,7 @@
 <!-- CONVERSION NOTES TODO:
  Review code and look for: 
  - textContent binding from <div>First: {{first}}</div> TO First <span>{{first}}</span><br>
- - polymer-element default attributes such as tabindex="0" move to hostAttributes: {  tabindex: 0}
+ - polymer-element default attributes such as tabindex="0" move to hostAttributes: {  tabindex: 0 }
  - custom elements correct JSON quotes required, change from <my-element foo="{ 'title': 'Persuasion', 'author': 'Austen' }"> to </my-element> to <my-element foo="{ "title": "Persuasion", "author": "Austen" }"></my-element>
  - custom elements attribute use dash-case not camelCase, change from  <my-element fooBar= to <my-element foo-bar
  - Polymer( fix mixins use Behaviors after is: see https://www.polymer-project.org/1.0/docs/devguide/behaviors.html
