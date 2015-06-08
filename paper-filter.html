@@ -1,7 +1,7 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-button/paper-button.html">
 
-<dom-module id='paper-filter'  > 
+<dom-module id='paper-filter'> 
 
   <style>
     :host {
@@ -77,7 +77,7 @@
     properties: {
       filters: {
         type: Object,
-        computed: 'justProperties(data, by)'
+        computed: 'justProperties(show, data, by)'
       },
       data: {
         type: Object
@@ -85,18 +85,23 @@
       by: String,
       filteredKeys: {
         type: Array,
-        computed: 'justOfTypes(data, filters)'
+        computed: 'justOfTypes(show, data, filters)'
       },
-      show: []
+      show: {
+        type: Array
+      },
     },
     observers: [ 'dataChanged(data.*)' ],
     dataChanged: function(newValue) {
+      debugger;
 //      this.filteredKeys = newValue;
-//      this.filteredKeys = this.justOfTypes(newValue, this.filters);
+      this.filteredKeys = this.justOfTypes(this.show, newValue, this.filters);
     },
     hostAttributes: {
+      show: [],
       by: "type",
-      data: {}
+      data: {},
+      filteredKeys:[]
     },
     ifFiltered: function(name, properties) { console.log('ifFiltered');
       if (this.filters.hasOwnProperty(properties)) {
@@ -121,14 +126,14 @@
             this.filters[e.currentTarget.attributes.filter.value] = {};
             this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value] = true;
           }
-          this.filteredKeys = this.justOfTypes(this.data, this.filters);
+          this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
         }
       }
     },
-    justProperties: function(data,properties){ console.log('justProperties');
+    justProperties: function(show,data,properties){ console.log('justProperties');
       var output = [];
       var outputNum = [];
-      var value = Object.keys(data);
+      var value = this.show;
 
       if (value !== undefined && value !== null && Array.isArray(value) && value.length > 0) {
         
@@ -165,13 +170,12 @@
       
       return result;
     },
-    justOfTypes: function(value,data,types){ console.log('justOfTypes');
-      if (value === null) {
-        return null;
-      }
+    justOfTypes: function(show, data, types){ console.log('justOfTypes');
+
+      
       if (isEmpty(types)) {
-        return value;
-        } else {
+        return data;
+      } else {
         var output = [];
         value.forEach(function(entry) {
           if (hasTypes(data[entry],types)) {
