@@ -80,25 +80,27 @@
         computed: 'justProperties(show, data, by)'
       },
       data: {
-        type: Object
+        type: Object,
+        reflectToAttribute: true
       },
       by: String,
       filteredKeys: {
         type: Array,
-        computed: 'justOfTypes(show, data, filters)'
+        computed: 'justOfTypes(show, data, filters)',
+        reflectToAttribute: true
       },
       show: {
-        type: Array
+        type: Array,
+        reflectToAttribute: true
       },
     },
-    observers: [ 'dataChanged(show.*,data.*,filters.*)' ],
-    dataChanged: function(show, data, filters) {
-      debugger;
+//    observers: [ 'dataChanged(stuff.*)' ],
+//    dataChanged: function(stuff) {
 //      this.filteredKeys = newValue;
-      this.filteredKeys = this.justOfTypes(show, data, filters);
-    },
+//      this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
+//    },
     hostAttributes: {
-      show: [],
+      show: [],//['00 Jobs', '01 Amazon', '02 CAB', '03 Cornwall Council', '04 DCH', '05 Ebay'],
       by: "type",
       data: {},
       filteredKeys:[]
@@ -160,16 +162,15 @@
       return result;
     },
     justOfTypes: function(show, data, types){ console.log('justOfTypes');
-      var value = show;
       if (isEmpty(types)) {
-        return data;
+        return show;
       } else {
         var output = [];
-        value.forEach(function(entry) {
+        for (var entry in show) {
           if (hasTypes(data[entry],types)) {
             output.push(entry); 
           }
-        });
+        }
         return output;
       }
     },
