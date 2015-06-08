@@ -91,11 +91,11 @@
         type: Array
       },
     },
-    observers: [ 'dataChanged(data.*)' ],
-    dataChanged: function(newValue) {
+    observers: [ 'dataChanged(show.*,data.*,filters.*)' ],
+    dataChanged: function(show, data, filters) {
       debugger;
 //      this.filteredKeys = newValue;
-      this.filteredKeys = this.justOfTypes(this.show, newValue, this.filters);
+      this.filteredKeys = this.justOfTypes(show, data, filters);
     },
     hostAttributes: {
       show: [],
@@ -157,22 +157,10 @@
         return b.num - a.num;
       })
 
-/*      if (result.length === 0) {
-        for(var prop in this.filters) {
-          for(var filter in this.filters[prop]) {
-            if (filter) {
-              result.push({name:filter});
-            }
-          }
-        }
-      }
-*/
-      
       return result;
     },
     justOfTypes: function(show, data, types){ console.log('justOfTypes');
-
-      
+      var value = show;
       if (isEmpty(types)) {
         return data;
       } else {
