@@ -94,11 +94,10 @@
         reflectToAttribute: true
       },
     },
-//    observers: [ 'dataChanged(stuff.*)' ],
-//    dataChanged: function(stuff) {
-//      this.filteredKeys = newValue;
-//      this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
-//    },
+    observers: [ 'dataChanged(show.*)' ],
+    dataChanged: function(stuff) {
+      this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
+    },
     hostAttributes: {
       show: [],//['00 Jobs', '01 Amazon', '02 CAB', '03 Cornwall Council', '04 DCH', '05 Ebay'],
       by: "type",
