@@ -13,7 +13,7 @@
     min-width: 172px;
     margin: 0px 2px 6px;
   }
-  mini-badge {
+  .mini-badge {
     display: inline-block;
     min-width: 10px;
     padding: 3px 7px;
@@ -28,9 +28,9 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{justProperties(show, data, by)}}">
+  <template is="dom-repeat" items="{{filters}}" filter="filter" as="x">
     <paper-button raised="{{!x.filtered}}" on-tap="setFilter" filter="{{by}}" title="{{x.name}}">
-      <span>{{x.name}}</span> <!-- <mini-badge>{{x.num}}</mini-badge> -->
+      <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
     </paper-button>
   </template>
 </template>
@@ -81,28 +81,31 @@
       },
       data: {
         type: Object,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+                notify: true
       },
       by: String,
-      filteredKeys: {
+      filtered: {
         type: Array,
-        computed: 'justOfTypes(show, data, filters)',
-        reflectToAttribute: true
+        computed: 'justOfTypes(data, filters)',
+        reflectToAttribute: true,
+        notify: true
       },
       show: {
         type: Array,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        notify: true
       },
     },
     observers: [ 'dataChanged(show.*)' ],
     dataChanged: function(stuff) {
-      this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
+      this.filteredKeys = this.justOfTypes(this.data, this.filters);
     },
     hostAttributes: {
       show: [],//['00 Jobs', '01 Amazon', '02 CAB', '03 Cornwall Council', '04 DCH', '05 Ebay'],
       by: "type",
       data: {},
-      filteredKeys:[]
+      filtered:{}
     },
     ifFiltered: function(name, properties) { console.log('ifFiltered');
       if (this.filters.hasOwnProperty(properties)) {
@@ -127,7 +130,7 @@
             this.filters[e.currentTarget.attributes.filter.value] = {};
             this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value] = true;
           }
-          this.filteredKeys = this.justOfTypes(this.show, this.data, this.filters);
+          this.filtered = this.justOfTypes(this.data, this.filters);
         }
       }
     },
@@ -160,14 +163,14 @@
 
       return result;
     },
-    justOfTypes: function(show, data, types){ console.log('justOfTypes');
+    justOfTypes: function(data, types){ console.log('justOfTypes');
       if (isEmpty(types)) {
-        return show;
+        return data;
       } else {
         var output = [];
         for (var entry in show) {
           if (hasTypes(data[entry],types)) {
-            output.push(entry); 
+            output.push(data[entry]); 
           }
         }
         return output;
@@ -175,7 +178,11 @@
     },
     ready: function() { 
       console.log('Filter Ready');
+    },
+    filter: function(item) {
+      return true; 
     }
+
   });
 </script>
 </dom-module> <!-- CONVERTED -->
