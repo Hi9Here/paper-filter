@@ -134,10 +134,10 @@
         }
       }
     },
-    justProperties: function(show,data,properties){ console.log('justProperties');
+    justProperties: function(data,properties){ console.log('justProperties');
       var output = [];
       var outputNum = [];
-      var value = this.show;
+      var value = Object.keys(this.filtered);
 
       if (value !== undefined && value !== null && Array.isArray(value) && value.length > 0) {
         
