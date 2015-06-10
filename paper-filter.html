@@ -76,13 +76,13 @@
     is: 'paper-filter', // CONVERTED WIP 
     properties: {
       filters: {
-        type: Object,
-        computed: 'justProperties(show, data, by)'
+        type: Array,
+        computed: 'justProperties(data, by, filtered)'
       },
       data: {
-        type: Object,
+        type: Array,
         reflectToAttribute: true,
-                notify: true
+        notify: true
       },
       by: String,
       filtered: {
@@ -90,21 +90,15 @@
         computed: 'justOfTypes(data, filters)',
         reflectToAttribute: true,
         notify: true
-      },
-      show: {
-        type: Array,
-        reflectToAttribute: true,
-        notify: true
-      },
+      }    
     },
-    observers: [ 'dataChanged(show.*)' ],
+    observers: [ 'dataChanged(data.*,filters)' ],
     dataChanged: function(stuff) {
-      this.filteredKeys = this.justOfTypes(this.data, this.filters);
+      this.filtered = this.justOfTypes(this.data, this.filters);
     },
     hostAttributes: {
-      show: [],//['00 Jobs', '01 Amazon', '02 CAB', '03 Cornwall Council', '04 DCH', '05 Ebay'],
-      by: "type",
       data: {},
+      by: "type",
       filtered:{}
     },
     ifFiltered: function(name, properties) { console.log('ifFiltered');
@@ -134,10 +128,10 @@
         }
       }
     },
-    justProperties: function(data,properties){ console.log('justProperties');
+    justProperties: function(data,properties, of){ console.log('justProperties');
       var output = [];
       var outputNum = [];
-      var value = Object.keys(this.filtered);
+      var value = Object.keys(of);
 
       if (value !== undefined && value !== null && Array.isArray(value) && value.length > 0) {
         
@@ -163,8 +157,12 @@
 
       return result;
     },
-    justOfTypes: function(data, types){ console.log('justOfTypes');
+    justOfTypes: function(polyData, types){ console.log('justOfTypes');
       if (isEmpty(types)) {
+        var data = [];
+        for (var i=0; i<polyData.length; i++) {
+          data[i] = polyData[i];
+        }
         return data;
       } else {
         var output = [];
