@@ -43,14 +43,6 @@
     }
     return is;
   }  
-  function isEmpty(obj) {
-    for(var prop in obj) {
-      if(obj.hasOwnProperty(prop)) {
-        return false;
-      }
-    }
-    return true;
-  }
   function hasTypes (data,types) {
     for (var key in types) {
       if (types.hasOwnProperty(key)) {
@@ -73,34 +65,40 @@
     return true;
   }
   Polymer({
+    ready: function() { 
+      console.log('Filter Ready');
+    },
     is: 'paper-filter', // CONVERTED WIP 
     properties: {
       filters: {
         type: Array,
-        computed: 'justProperties(data, by, filtered)'
+        computed: 'justProperties(data, by, data)'
+      },
+      filtered: {
+        type: Array,
+        notify: true,
+        reflectToAttribute: true,
+        computed: 'justOfTypes(data, filters)'//,
+//        value: function() {
+ //         return []; //justOfTypes(data, filters);
+  //      }
       },
       data: {
         type: Array,
         reflectToAttribute: true,
         notify: true
       },
-      by: String,
-      filtered: {
-        type: Array,
-        computed: 'justOfTypes(data, filters)',
-        reflectToAttribute: true,
-        notify: true
-      }    
+      by: String
     },
     observers: [ 'dataChanged(data.*,filters)' ],
     dataChanged: function(stuff) {
       this.filtered = this.justOfTypes(this.data, this.filters);
     },
-    hostAttributes: {
-      data: {},
-      by: "type",
-      filtered:{}
-    },
+//    hostAttributes: {
+ //     data: {},
+  //    by: "type",
+   //   filtered:{}
+    //},
     ifFiltered: function(name, properties) { console.log('ifFiltered');
       if (this.filters.hasOwnProperty(properties)) {
         if (this.filters[properties].hasOwnProperty(name)) {
@@ -157,30 +155,25 @@
 
       return result;
     },
-    justOfTypes: function(polyData, types){ console.log('justOfTypes');
-      if (isEmpty(types)) {
-        var data = [];
-        for (var i=0; i<polyData.length; i++) {
-          data[i] = polyData[i];
-        }
+    justOfTypes: function(data, types){ console.log('justOfTypes');
+      if (!Array.isArray(data) || !Array.isArray(types)) {
+        return []
+      }
+      if (data.length < 2 || types.length < 1 ) {
         return data;
       } else {
         var output = [];
-        for (var entry in show) {
-          if (hasTypes(data[entry],types)) {
-            output.push(data[entry]); 
+        for (var i = 0, l = data.length; i < l; i++) {
+          if (hasTypes(data[i],types)) {
+            output.push(data[i]); 
           }
         }
         return output;
       }
     },
-    ready: function() { 
-      console.log('Filter Ready');
-    },
     filter: function(item) {
       return true; 
     }
-
   });
 </script>
 </dom-module> <!-- CONVERTED -->
