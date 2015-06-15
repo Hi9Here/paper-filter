@@ -60,9 +60,11 @@
         notify: true
       }
     },
-    observers: ['outputChanged(data)'],
+    observers: ['outputChanged(data)','filtersChanged(data, obj_filters)'],
     outputChanged: function(data) {
       this.filters = this.justProperties(data, this.by);
+    },
+    filtersChanged: function(data, obj_filters) {
       this.output = this.justOfTypes(data);
     },
     filter_data: function(data) {
@@ -130,16 +132,16 @@
         return false;
       }
     },
-    justOfTypes: function(data){ console.log('justOfTypes');
+    justOfTypes: function(data, obj_filters){ console.log('justOfTypes');
       if (value === null) {
         return null;
       }
-      if (isEmpty(types)) {
+      if (isEmpty(obj_filters)) {
         return value;
       } else {
         var output = [];
         value.forEach(function(entry) {
-          if (hasTypes(data[entry],types)) {
+          if (hasTypes(data[entry],obj_filters)) {
             output.push(entry); 
           }
         });
