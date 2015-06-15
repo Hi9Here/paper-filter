@@ -136,7 +136,7 @@
       if (data === null) {
         return null;
       }
-      if (isEmpty(obj_filters)) {
+      if (obj_filters === undefined || isEmpty(obj_filters)) {
         return data;
       } else {
         var output = [];
