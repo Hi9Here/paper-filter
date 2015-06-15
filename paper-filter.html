@@ -38,7 +38,7 @@
 <script>
 
 (function() {
-    function hasTypes (data,types) {
+  function hasTypes (data,types) {
     for (var key in types) {
       if (types.hasOwnProperty(key)) {
         var obj = types[key];
@@ -137,8 +137,8 @@
       }
     },
     justOfTypes: function(data, obj_filters){ console.log('justOfTypes');
-      if (data === null) {
-        return null;
+      if (data === null || data === undefined) {
+        return [];
       }
       if (obj_filters === undefined || isEmpty(obj_filters)) {
         return data;
