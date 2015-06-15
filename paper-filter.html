@@ -144,7 +144,7 @@
         return data;
       } else {
         var output = [];
-        data.forEach(function(entry) {
+        for (var entry = 0, l = data.length; entry < l; entry++) {
           if (hasTypes(data[entry],obj_filters)) {
             output.push(data[entry]); 
           }
