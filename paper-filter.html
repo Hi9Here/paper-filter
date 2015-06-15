@@ -38,6 +38,27 @@
 <script>
 
 (function() {
+    function hasTypes (data,types) {
+    for (var key in types) {
+      if (types.hasOwnProperty(key)) {
+        var obj = types[key];
+        for (var prop in obj) {
+          if(obj.hasOwnProperty(prop)){
+            if (data[key]) {
+              if (obj[prop]) {
+                if (data[key].indexOf(prop) === -1 ) {
+                  return false;
+                }
+              }
+            } else {
+              return false;
+            }
+          }
+        }
+      }
+    }
+    return true;
+  }
   function isEmpty(obj) {
     for(var prop in obj) {
       if(obj.hasOwnProperty(prop)) {
@@ -64,38 +85,15 @@
         notify: true
       },
       data: {
-        type: Array,
-        notify: true
+        type: Array
       }
     },
-    observers: ['outputChanged(data)','filtersChanged(data, obj_filters)'],
+    observers: ['outputChanged(data.*)','filtersChanged(data)'],
     outputChanged: function(data) {
-      this.filters = this.justProperties(data, this.by);
+      this.filters = this.justProperties(this.data, this.by);
     },
     filtersChanged: function(data, obj_filters) {
-      this.output = this.justOfTypes(data, obj_filters);
-    },
-    filter_data: function(data) {
-      var types = this.obj_filters;
-      for (var key in types) {
-        if (types.hasOwnProperty(key)) {
-          var obj = types[key];
-          for (var prop in obj) {
-            if(obj.hasOwnProperty(prop)){
-              if (data.hasOwnProperty(key)) {
-                if (obj[prop]) {
-                  if (data[key].indexOf(prop) === -1 ) {
-                    return false;
-                  }
-                }
-              } else {
-                return false;
-              }
-            }
-          }
-        }
-      }
-      return true;
+      this.output = this.justOfTypes(this.data, this.obj_filters);
     },
     justProperties: function(data, properties) {
       console.log('justProperties');
@@ -164,41 +162,22 @@
         if (this.obj_filters[filter].hasOwnProperty(title)) {
           delete this.obj_filters[filter][title];
         } else {
-          this.set("obj_filters."+filter+'.'+title , true);
+          this.obj_filters[filter][title] = true;
         }
       } else {
         if (this.obj_filters === undefined) {
           this.obj_filters = {};
         }
         this.obj_filters[filter] = {};
-        this.set("obj_filters." + filter+'.'+title , true);
+        this.obj_filters[filter][title] = true;
       }
       
       this.filters = this.justProperties(this.data, this.by);
-      
+            
       console.log(this.obj_filters);
     }
   });
 })();
 
 </script>
-</dom-module> <!-- CONVERTED -->
-
-<!-- CONVERSION NOTES TODO:
- Review code and look for: 
- - textContent binding from <div>First: {{first}}</div> TO First <span>{{first}}</span><br>
- - polymer-element default attributes such as tabindex="0" move to hostAttributes: {  tabindex: 0 }
- - custom elements correct JSON quotes required, change from <my-element foo="{ 'title': 'Persuasion', 'author': 'Austen' }"> to </my-element> to <my-element foo="{ "title": "Persuasion", "author": "Austen" }"></my-element>
- - custom elements attribute use dash-case not camelCase, change from  <my-element fooBar= to <my-element foo-bar
- - Polymer( fix mixins use Behaviors after is: see https://www.polymer-project.org/1.0/docs/devguide/behaviors.html
- - Check layout attributes replaced by layout classes <div layout horizontal center>` to `<div class="layout horizontal center">, 
- - Cleanup class= 
- - Convert core- to iron- or paper- replacement elements at PolymerElements
- - Remove unresolved from <body> tag
- - Cleanup iron-ajax params url for embedded bindings {{}}
- - iron-ajax replace this.$.xxx_ajax.abort(); and this.$.xxx_ajax.go(); with this.$.xxx_ajax.generateRequest() 
- - Fix iron-list if needed 
- - Fix indentation as need 
- - Cleanup Comments to reflect changes ,
- - see https://www.polymer-project.org/1.0/docs/migration.html
-   -->
+</dom-module>
