@@ -65,7 +65,7 @@
       this.filters = this.justProperties(data, this.by);
     },
     filtersChanged: function(data, obj_filters) {
-      this.output = this.justOfTypes(data);
+      this.output = this.justOfTypes(data, obj_filters);
     },
     filter_data: function(data) {
       var types = this.obj_filters;
