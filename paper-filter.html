@@ -5,9 +5,9 @@
 
   <style>
     :host {
-    max-height: 92px;
-    display: block;
-  }
+      max-height: 92px;
+      display: block;
+    }
   paper-button {
     background: #fff;
     min-width: 172px;
@@ -28,152 +28,148 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{filters}}" as="x">
-    <paper-button raised="{{!x.filtered}}" on-tap="setFilter" filter="{{by}}" title="{{x.name}}">
-      <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
-    </paper-button>
+  <template is="dom-repeat" items="{{filters}}" as="x" >
+     <paper-button raised$="{{!x.filtered}}" on-tap="setFilter" filter="type" title="{{x.name}}">
+        <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
+     </paper-button>
   </template>
 </template>
 
 <script>
-  function getArray(value,data,theArray) {
-    var is = [];
-    if (data[value].hasOwnProperty(theArray)) {
-      is = data[value][theArray];
-    }
-    return is;
-  }  
-  function hasTypes (data,types) {
-    for (var key in types) {
-      if (types.hasOwnProperty(key)) {
-        var obj = types[key];
-        for (var prop in obj) {
-          if(obj.hasOwnProperty(prop)){
-            if (data.hasOwnProperty(key)) {
-              if (obj[prop]) {
-                if (data[key].indexOf(prop) === -1 ) {
-                  return false;
-                }
-              }
-            } else {
-              return false;
-            }
-          }
-        }
-      }
-    }
-    return true;
-  }
+
+(function() {
   Polymer({
-    ready: function() { 
-      console.log('Filter Ready');
-    },
-    is: 'paper-filter', // CONVERTED WIP 
+    is: 'paper-filter',
     properties: {
       filters: {
-        type: Array,
-        computed: 'justProperties(data, by, data)'
+        type: Array
       },
-      filtered: {
+      obj_filters: {
+        type: Object,
+        value: {}
+      },
+      by: {
+        type: String
+      },
+      output: {
         type: Array,
-        notify: true,
-        reflectToAttribute: true//,
-//        computed: 'justOfTypes(data, filters)'//,
-//        value: function() {
- //         return []; //justOfTypes(data, filters);
-  //      }
+        notify: true
       },
       data: {
         type: Array,
-      },
-      by: String
-    },
-    observers: [ 'dataChanged(data.*,filters)' ],
-    dataChanged: function(stuff) {
-      this.filtered = this.justOfTypes(this.data, this.filters);
-      // this.filters = this.justProperties(this.data, this.filters, this.data);
-    },
-    hostAttributes: {
-      data: [],
-      by: "type",
-      filtered:[]
-    },
-    ifFiltered: function(name, properties) { console.log('ifFiltered');
-      if (this.filters.hasOwnProperty(properties)) {
-        if (this.filters[properties].hasOwnProperty(name)) {
-          return this.filters[properties][name];
-          } else { 
-          return false;
-        }
-        } else {
-        return false;
+        notify: true
       }
     },
-    setFilter: function(e) { console.log('setFilter');
-      if (e.currentTarget.attributes.hasOwnProperty('filter')){
-        if (e.currentTarget.attributes.filter.hasOwnProperty('value')) {
-          if (this.filters.hasOwnProperty(e.currentTarget.attributes.filter.value)) {
-	    delete this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value];
-          } else {
-            if (this.filters === undefined) { 
-              this.filters = {};
+    observers: ['outputChanged(data.* )'],
+    outputChanged: function(stuff) {
+      this.filters = this.justProperties(this.data, this.by);
+    },
+    filter_data: function(data) {
+      var types = this.obj_filters;
+      for (var key in types) {
+        if (types.hasOwnProperty(key)) {
+          var obj = types[key];
+          for (var prop in obj) {
+            if(obj.hasOwnProperty(prop)){
+              if (data.hasOwnProperty(key)) {
+                if (obj[prop]) {
+                  if (data[key].indexOf(prop) === -1 ) {
+                    return false;
+                  }
+                }
+              } else {
+                return false;
+              }
             }
-            this.filters[e.currentTarget.attributes.filter.value] = {};
-            this.filters[e.currentTarget.attributes.filter.value][e.currentTarget.attributes.title.value] = true;
           }
-          this.filtered = this.justOfTypes(this.data, this.filters);
         }
       }
+      return true;
     },
-    justProperties: function(data,properties, of){ console.log('justProperties');
+    justProperties: function(data, properties) {
+      console.log('justProperties');
       var output = [];
       var outputNum = [];
-      var value = Object.keys(of);
-
-      if (value !== undefined && value !== null && Array.isArray(value) && value.length > 0) {
-        
+      if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {
         var test = function(entryA) {
-          if (output.indexOf(entryA) === -1){
-            output.push(entryA); 
-            outputNum.push( 1 );
-            } else {
+          if (output.indexOf(entryA) === -1) {
+            output.push(entryA);
+            outputNum.push(1);
+          } else {
             outputNum[output.indexOf(entryA)]++;
           }
         };
-        for(var entry in value) {
-          getArray(value[entry], data, properties).forEach(test);
+        for (var i = 0, l = data.length; i < l; i++) {
+          test(data[i][properties]);
         }
       }
       var result = [];
-      for (var i = 0, l = output.length; i < l; i++) {
-        result[i] = {name:output[i],num:outputNum[i],filtered:this.ifFiltered(output[i],properties)};
+      for (var a = 0, x = output.length; a < x; a++) {
+        result[a] = {
+          name: output[a],
+          num: outputNum[a],
+          filtered: this.ifFiltered(output[a], properties)
+        };
       }
       result.sort(function(a, b) {
         return b.num - a.num;
-      })
-
+      });
+      
+      console.log(result);
       return result;
     },
-    justOfTypes: function(data, types){ console.log('justOfTypes');
-      if (!Array.isArray(data) || !Array.isArray(types)) {
-        return []
+    ifFiltered: function(name, properties) {
+      if (this.obj_filters.hasOwnProperty(properties)) {
+        if (this.obj_filters[properties].hasOwnProperty(name)) {
+          return this.obj_filters[properties][name];
+        } else {
+          return false;
+        }
+      } else {
+        return false;
       }
-      if (data.length < 2 || types.length < 1 ) {
-        return data;
+    },
+    justOfTypes: function(data){ console.log('justOfTypes');
+      if (value === null) {
+        return null;
+      }
+      if (isEmpty(types)) {
+        return value;
       } else {
         var output = [];
-        for (var i = 0, l = data.length; i < l; i++) {
-          if (hasTypes(data[i],types)) {
-            output.push(data[i]); 
+        value.forEach(function(entry) {
+          if (hasTypes(data[entry],types)) {
+            output.push(entry); 
           }
-        }
+        });
         return output;
       }
     },
-    filter: function(item) {
-      return true; 
+    setFilter: function(e) {
+      var filter = e.currentTarget.getAttribute('filter');
+      var title  = e.currentTarget.getAttribute('title');
+
+      if (this.obj_filters.hasOwnProperty(filter)) {
+        if (this.obj_filters[filter].hasOwnProperty(title)) {
+          delete this.obj_filters[filter][title];
+        } else {
+          this.set("obj_filters."+filter+'.'+title , true);
+        }
+      } else {
+        if (this.obj_filters === undefined) {
+          this.obj_filters = {};
+        }
+        this.obj_filters[filter] = {};
+        this.set("obj_filters." + filter+'.'+title , true);
+      }
+      
+      this.filters = this.justProperties(this.data, this.by);
+      
+      console.log(this.obj_filters);
     }
   });
+})();
+
 </script>
 </dom-module> <!-- CONVERTED -->
 
