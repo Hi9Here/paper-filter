@@ -59,10 +59,10 @@
         type: Array
       }
     },
-    observers: ['outputChanged(data.* )'],
-    outputChanged: function(stuff) {
-      this.filters = this.justProperties(this.data, this.by);
-      this.output = this.justOfTypes(this.data);
+    observers: ['outputChanged(data)'],
+    outputChanged: function(data) {
+      this.filters = this.justProperties(data, this.by);
+      this.output = this.justOfTypes(data);
     },
     filter_data: function(data) {
       var types = this.obj_filters;
