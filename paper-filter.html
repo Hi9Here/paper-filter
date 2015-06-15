@@ -88,11 +88,9 @@
         type: Array
       }
     },
-    observers: ['outputChanged(data.*)','filtersChanged(data)'],
+    observers: ['outputChanged(data.*)'],
     outputChanged: function(data) {
       this.filters = this.justProperties(this.data, this.by);
-    },
-    filtersChanged: function(data, obj_filters) {
       this.output = this.justOfTypes(this.data, this.obj_filters);
     },
     justProperties: function(data, properties) {
@@ -173,7 +171,8 @@
       }
       
       this.filters = this.justProperties(this.data, this.by);
-            
+      this.output = this.justOfTypes(this.data, this.obj_filters);
+      
       console.log(this.obj_filters);
     }
   });
