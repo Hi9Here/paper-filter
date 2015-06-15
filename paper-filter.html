@@ -133,16 +133,16 @@
       }
     },
     justOfTypes: function(data, obj_filters){ console.log('justOfTypes');
-      if (value === null) {
+      if (data === null) {
         return null;
       }
       if (isEmpty(obj_filters)) {
-        return value;
+        return data;
       } else {
         var output = [];
-        value.forEach(function(entry) {
+        data.forEach(function(entry) {
           if (hasTypes(data[entry],obj_filters)) {
-            output.push(entry); 
+            output.push(data[entry]); 
           }
         });
         return output;
