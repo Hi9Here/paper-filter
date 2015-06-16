@@ -169,6 +169,9 @@
       if (this.obj_filters.hasOwnProperty(this.by)) {
         if (this.obj_filters[this.by].hasOwnProperty(title)) {
           delete this.obj_filters[this.by][title];
+          if (isEmpty(this.obj_filters[this.by])) {
+            delete this.obj_filters[this.by];
+          }
         } else {
           this.obj_filters[this.by][title] = true;
         }
