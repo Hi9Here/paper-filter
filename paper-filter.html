@@ -49,6 +49,10 @@
                 if (data[key].indexOf(prop) === -1 ) {
                   return false;
                 }
+              } else {
+                if (data[key].indexOf(prop) !== -1 ) {
+                  return false;
+                }
               }
             } else {
               return false;
