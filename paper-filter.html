@@ -29,7 +29,7 @@
 
 <template>
   <template is="dom-repeat" items="{{filters}}" as="x" >
-     <paper-button raised="{{!x.filtered}}" on-tap="setFilter" filter="{{by}}" title="{{x.name}}">
+     <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
         <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
      </paper-button>
   </template>
@@ -160,21 +160,20 @@
       }
     },
     setFilter: function(e) {
-      var filter = e.currentTarget.getAttribute('filter');
       var title  = e.currentTarget.getAttribute('title');
 
-      if (this.obj_filters.hasOwnProperty(filter)) {
-        if (this.obj_filters[filter].hasOwnProperty(title)) {
-          delete this.obj_filters[filter][title];
+      if (this.obj_filters.hasOwnProperty(this.by)) {
+        if (this.obj_filters[this.by].hasOwnProperty(title)) {
+          delete this.obj_filters[this.by][title];
         } else {
-          this.obj_filters[filter][title] = true;
+          this.obj_filters[this.by][title] = true;
         }
       } else {
         if (this.obj_filters === undefined) {
           this.obj_filters = {};
         }
-        this.obj_filters[filter] = {};
-        this.obj_filters[filter][title] = true;
+        this.obj_filters[this.by] = {};
+        this.obj_filters[this.by][title] = true;
       }
       
       this.filters = this.justProperties(this.data, this.by);
