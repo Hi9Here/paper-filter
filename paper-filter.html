@@ -107,6 +107,7 @@
           }
         };
         for (var i = 0, l = data.length; i < l; i++) {
+          if (data[i][properties] === undefined) continue;
           test(data[i][properties]);
         }
       }
