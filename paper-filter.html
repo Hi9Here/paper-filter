@@ -44,7 +44,7 @@
         var obj = types[key];
         for (var prop in obj) {
           if(obj.hasOwnProperty(prop)){
-            if (data[key]) {
+            if (data.hasOwnProperty(key)) {
               if (obj[prop]) {
                 if (data[key].indexOf(prop) === -1 ) {
                   return false;
