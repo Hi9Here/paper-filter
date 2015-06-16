@@ -108,7 +108,13 @@
         };
         for (var i = 0, l = data.length; i < l; i++) {
           if (data[i][properties] === undefined) continue;
-          test(data[i][properties]);
+          if (Array.isArray(data[i][properties])) {
+            for (var b = 0, c = data[i][properties].length; b < c; b++) {
+              test(data[i][properties][b]);
+            }
+          } else {
+            test(data[i][properties]);
+          }
         }
       }
       var result = [];
