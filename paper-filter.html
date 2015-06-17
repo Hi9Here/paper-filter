@@ -91,6 +91,9 @@
       },
       data: {
         type: Array
+      },
+      max:{
+        type: String 
       }
     },
     observers: ['outputChanged(data.*)'],
@@ -166,7 +169,7 @@
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
-
+      
       if (this.obj_filters.hasOwnProperty(this.by)) {
         if (this.obj_filters[this.by].hasOwnProperty(title)) {
           delete this.obj_filters[this.by][title];
@@ -174,6 +177,9 @@
             delete this.obj_filters[this.by];
           }
         } else {
+          if (+this.max === 1) {
+            this.obj_filters[this.by] = {};
+          }
           this.obj_filters[this.by][title] = true;
         }
       } else {
