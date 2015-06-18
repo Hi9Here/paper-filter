@@ -99,7 +99,7 @@
     observers: ['outputChanged(data.*)'],
     outputChanged: function(data) {
       this.filters = this.justProperties(this.data, this.by);
-      this.output = this.justOfTypes(this.data, this.obj_filters);
+      this.output = this.data;
     },
     justProperties: function(data, properties) {
       console.log('justProperties');
