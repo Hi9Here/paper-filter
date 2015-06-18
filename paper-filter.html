@@ -151,7 +151,7 @@
         return false;
       }
     },
-    justOfTypes: function(data, obj_filters){ console.log('justOfTypes');
+    justOfTypes: function(data, obj_filters){ 
       if (data === null || data === undefined) {
         return [];
       }
@@ -192,11 +192,8 @@
       
       this.filters = this.justProperties(this.data, this.by);
       this.output = this.justOfTypes(this.data, this.obj_filters);
-      
-      console.log(this.obj_filters);
     }
   });
 })();
-
 </script>
 </dom-module>
