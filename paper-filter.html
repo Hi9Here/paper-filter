@@ -147,6 +147,9 @@
       return result;
     },
     ifFiltered: function(name, properties) {
+      if (this.numberPressed == 0) {
+        return false;
+      }
       if (this.obj_filters.hasOwnProperty(properties)) {
         if (this.obj_filters[properties].hasOwnProperty(name)) {
           return this.obj_filters[properties][name];
@@ -161,6 +164,7 @@
       if (data === null || data === undefined) {
         return [];
       }
+      if (numberPressed == 0) return data
       if (obj_filters === undefined || isEmpty(obj_filters)) {
         return data;
       } else {
@@ -181,12 +185,15 @@
           delete this.obj_filters[this.by][title];
           if (isEmpty(this.obj_filters[this.by])) {
             delete this.obj_filters[this.by];
+            this.numberPressed--
           }
         } else {
           if (+this.max === 1) {
             this.obj_filters[this.by] = {};
+            this.numberPressed == 1;
           }
           this.obj_filters[this.by][title] = true;
+          this.numberPressed++
         }
       } else {
         if (this.obj_filters === undefined) {
@@ -205,7 +212,8 @@
         a.push( this.justProperties(this.data,by));
       }
       return a
-    }
+    },
+    numberPressed: 0
   });
 })();
 </script>
