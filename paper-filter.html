@@ -179,28 +179,29 @@
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
+      var by  = e.currentTarget.getAttribute('by');
       
-      if (this.obj_filters.hasOwnProperty(this.by)) {
-        if (this.obj_filters[this.by].hasOwnProperty(title)) {
-          delete this.obj_filters[this.by][title];
-          if (isEmpty(this.obj_filters[this.by])) {
-            delete this.obj_filters[this.by];
+      if (this.obj_filters.hasOwnProperty(by)) {
+        if (this.obj_filters[by].hasOwnProperty(title)) {
+          delete this.obj_filters[by][title];
+          if (isEmpty(this.obj_filters[by])) {
+            delete this.obj_filters[by];
             this.numberPressed--
           }
         } else {
           if (+this.max === 1) {
-            this.obj_filters[this.by] = {};
+            this.obj_filters[by] = {};
             this.numberPressed == 1;
           }
-          this.obj_filters[this.by][title] = true;
+          this.obj_filters[by][title] = true;
           this.numberPressed++
         }
       } else {
         if (this.obj_filters === undefined) {
           this.obj_filters = {};
         }
-        this.obj_filters[this.by] = {};
-        this.obj_filters[this.by][title] = true;
+        this.obj_filters[by] = {};
+        this.obj_filters[by][title] = true;
       }
       this.filters = this.getFilters(); 
       this.output = this.justOfTypes(this.data, this.obj_filters);
