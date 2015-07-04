@@ -1,14 +1,14 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-button/paper-button.html">
 
-<dom-module id='paper-filter'> 
+ <dom-module id='paper-filter'> 
 
   <style>
-    :host {
-      max-height: 98px;
-      display: block;
-      overflow: hidden;
-    }
+  :host {
+    max-height: 98px;
+    display: block;
+    overflow: hidden;
+  }
   paper-button {
     background: #fff;
     min-width: 172px;
@@ -29,15 +29,19 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{filters}}" as="x" >
-     <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
-        <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
-     </paper-button>
+  <template is="dom-repeat" items="{{filters}}" as="filter" >
+  <div>
+    <template is="dom-repeat" items="{{filter}}" as="x" >
+       <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}" by="x.by" >
+          <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
+       </paper-button>
+    </template>
+  </div>
   </template>
 </template>
 
+</dom-module>
 <script>
-
 (function() {
   function hasTypes (data,types) {
     for (var key in types) {
@@ -76,7 +80,8 @@
     is: 'paper-filter',
     properties: {
       filters: {
-        type: Array
+        type: Array,
+        value: []
       },
       obj_filters: {
         type: Object,
@@ -98,8 +103,8 @@
     },
     observers: ['outputChanged(data.*)'],
     outputChanged: function(data) {
-      this.filters = this.justProperties(this.data, this.by);
-      this.output = this.data;
+      this.filters = this.getFilters(); 
+//      this.output = this.data;
     },
     justProperties: function(data, properties) {
       console.log('justProperties');
@@ -130,6 +135,7 @@
         result[a] = {
           name: output[a],
           num: outputNum[a],
+          by: properties,
           filtered: this.ifFiltered(output[a], properties)
         };
       }
@@ -189,11 +195,17 @@
         this.obj_filters[this.by] = {};
         this.obj_filters[this.by][title] = true;
       }
-      
-      this.filters = this.justProperties(this.data, this.by);
+      this.filters = this.getFilters(); 
       this.output = this.justOfTypes(this.data, this.obj_filters);
+    },
+    getFilters: function () {
+      var a = [];
+      for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
+        var by = this.by.split(',')[i];
+        this.filters.push( this.justProperties(this.data,by));
+      }
+      return a
     }
   });
 })();
 </script>
-</dom-module>
