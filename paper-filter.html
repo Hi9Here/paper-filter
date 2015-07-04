@@ -202,7 +202,7 @@
       var a = [];
       for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
         var by = this.by.split(',')[i];
-        this.filters.push( this.justProperties(this.data,by));
+        a.push( this.justProperties(this.data,by));
       }
       return a
     }
