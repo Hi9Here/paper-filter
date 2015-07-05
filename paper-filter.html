@@ -30,7 +30,7 @@
 
 <template>
   <template is="dom-repeat" items="{{filters}}" indexAs="n" as="filter" >
-  <div data-by="{{n}}>
+  <div title="{{n}}">
     <template is="dom-repeat" items="{{filter}}" as="x" >
        <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
           <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
