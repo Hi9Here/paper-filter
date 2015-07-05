@@ -179,7 +179,7 @@
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
-      var by  = e.currentTarget.getAttribute('data-by');
+      var by = this.by.split(',')[+e.currentTarget.parentElement.getAttribute('title')];
       
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
