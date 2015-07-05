@@ -30,7 +30,7 @@
 
 <template>
   <template is="dom-repeat" items="{{filters}}" indexAs="n" as="filter" >
-  <div title="{{n}}">
+  <div id="{{n}}">
     <template is="dom-repeat" items="{{filter}}" as="x" >
        <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
           <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
@@ -179,7 +179,7 @@
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
-      var by = this.by.split(',')[+e.currentTarget.parentElement.getAttribute('title')];
+      var by = this.by.split(',')[+e.currentTarget.parentElement.id];
       
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
