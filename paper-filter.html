@@ -212,13 +212,14 @@
     },
     getFilters: function () {
       var a = [];
-      this.max = [];
+      var max = [];
       for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
         var by = this.by.split(',')[i];
         var filter = this.justProperties(this.data,by)
         a.push(filter.value);
         this.max.push(filter.max);
       }
+      if (this.max != max) { this.max = max; }
       console.log(this.max);
       return a
     },
