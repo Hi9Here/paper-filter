@@ -214,6 +214,7 @@
         }
         this.obj_filters[by] = {};
         this.obj_filters[by][title] = true;
+        this.numberPressed[index]++
       }
       this.filters = this.getFilters(); 
       this.output = this.justOfTypes(this.data, this.obj_filters);
