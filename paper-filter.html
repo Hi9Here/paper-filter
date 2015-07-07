@@ -191,21 +191,20 @@
       var index = +e.currentTarget.parentElement.index;
       var by = this.by.split(',')[index];
       var max = +this.max[index];
-      var numberPressed = +this.numberPressed[index];
       
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
           delete this.obj_filters[by][title];
           if (isEmpty(this.obj_filters[by])) {
             delete this.obj_filters[by];
-            numberPressed--
+            this.numberPressed[index]--
           }
         } else {
           if (max === numberPressed) {
             this.obj_filters[by] = {};
-            numberPressed = max;
+            this.numberPressed[index] = max;
           } else {
-            numberPressed++
+            this.numberPressed[index]++
           }
           this.obj_filters[by][title] = true;
         }
