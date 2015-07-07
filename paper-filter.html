@@ -124,7 +124,7 @@
               obj_filters[this.by.split(',')[i]] = this.obj_filters[this.by.split(',')[i]];
             }
           }
-          data = justOfTypes(data,obj_filters);
+          data = this.justOfTypes(data,obj_filters);
         }
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
