@@ -143,7 +143,7 @@
         result[a] = {
           name: output[a],
           num: outputNum[a],
-          filtered: this.ifFiltered(output[a], properties)
+          filtered: this.ifFiltered(output[a], properties, numberPressed)
         };
       }
       result.sort(function(a, b) {
