@@ -117,6 +117,15 @@
       var outputNum = [];
       var max = 0;
       if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {
+        var obj_filter = {}
+        if (index  > 0) {
+          for (var i = 0,l = index - 1; i < l; i++) {
+            if (this.obj_filters.hasOwnProperty(this.by.split(',')[i])) {
+              obj_filters[this.by.split(',')[i]] = this.obj_filters[this.by.split(',')[i]];
+            }
+          }
+          data = justOfTypes(data,obj_filters);
+        }
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
             output.push(entryA);
@@ -223,9 +232,12 @@
       var a = [];
       var max = [];
       var numberPressed = [];
-      for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
+      
+      var output = this.data;
+      
+      for (var i = 0,l = this.by.split(',').length; i < l; i++) {
         var by = this.by.split(',')[i];
-        var filter = this.justProperties(this.output,i)
+        var filter = this.justProperties(output,i)
         a.push(filter.value);
         max.push(filter.max);
         numberPressed.push(0);
