@@ -106,8 +106,13 @@
       this.filters = this.getFilters(); 
 //      this.output = this.data;
     },
-    justProperties: function(data, properties) {
+    justProperties: function(data, index) {
       console.log('justProperties');
+      var properties = this.by.split(',')[index];
+      var numberPressed = 0
+      if (this.numberPressed.length >= index) {
+        numberPressed = this.numberPressed[index];
+      }
       var output = [];
       var outputNum = [];
       var max = 0;
@@ -150,8 +155,8 @@
       
       return {value :result, max: max};
     },
-    ifFiltered: function(name, properties) {
-      if (this.numberPressed == 0) {
+    ifFiltered: function(name, properties, numberPressed) {
+      if (numberPressed == 0) {
         return false;
       }
       if (this.obj_filters.hasOwnProperty(properties)) {
@@ -220,7 +225,7 @@
       var numberPressed = [];
       for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
         var by = this.by.split(',')[i];
-        var filter = this.justProperties(this.data,by)
+        var filter = this.justProperties(this.data,i)
         a.push(filter.value);
         max.push(filter.max);
         numberPressed.push(0);
