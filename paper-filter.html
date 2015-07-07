@@ -217,7 +217,7 @@
         var by = this.by.split(',')[i];
         var filter = this.justProperties(this.data,by)
         a.push(filter.value);
-        this.max.push(filter.max);
+        max.push(filter.max);
       }
       if (this.max != max) { this.max = max; }
       console.log(this.max);
