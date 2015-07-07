@@ -184,6 +184,7 @@
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
       var by = this.by.split(',')[+e.currentTarget.parentElement.index];
+      var max = +this.max[+e.currentTarget.parentElement.index];
       
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
@@ -193,12 +194,13 @@
             this.numberPressed--
           }
         } else {
-          if (+this.max === 1) {
+          if (max === this.numberPressed) {
             this.obj_filters[by] = {};
-            this.numberPressed == 1;
+            this.numberPressed = max;
+          } else {
+            this.numberPressed++
           }
           this.obj_filters[by][title] = true;
-          this.numberPressed++
         }
       } else {
         if (this.obj_filters === undefined) {
