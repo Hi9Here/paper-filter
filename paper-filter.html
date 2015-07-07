@@ -29,10 +29,10 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{filters}}" indexAs="n" as="filter" >
+  <template is="dom-repeat" items="{{filters}}" indexAs="n" as="filter" delay="150" >
   <div index="{{index}}" max="{{max[index]]">
     <template is="dom-repeat" items="{{filter}}" as="x" >
-       <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
+       <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}" delay="150">
           <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
        </paper-button>
     </template>
