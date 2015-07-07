@@ -225,7 +225,7 @@
       var numberPressed = [];
       for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
         var by = this.by.split(',')[i];
-        var filter = this.justProperties(this.data,i)
+        var filter = this.justProperties(this.output,i)
         a.push(filter.value);
         max.push(filter.max);
         numberPressed.push(0);
