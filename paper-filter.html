@@ -183,22 +183,24 @@
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
-      var by = this.by.split(',')[+e.currentTarget.parentElement.index];
-      var max = +this.max[+e.currentTarget.parentElement.index];
+      var index = +e.currentTarget.parentElement.index;
+      var by = this.by.split(',')[index];
+      var max = +this.max[index];
+      var numberPressed = +this.numberPressed[index];
       
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
           delete this.obj_filters[by][title];
           if (isEmpty(this.obj_filters[by])) {
             delete this.obj_filters[by];
-            this.numberPressed--
+            numberPressed--
           }
         } else {
-          if (max === this.numberPressed) {
+          if (max === numberPressed) {
             this.obj_filters[by] = {};
-            this.numberPressed = max;
+            numberPressed = max;
           } else {
-            this.numberPressed++
+            numberPressed++
           }
           this.obj_filters[by][title] = true;
         }
@@ -215,17 +217,20 @@
     getFilters: function () {
       var a = [];
       var max = [];
+      var numberPressed # [];
       for (var i = 0,l = this.by.split(',').length; i < l; i++) { 
         var by = this.by.split(',')[i];
         var filter = this.justProperties(this.data,by)
         a.push(filter.value);
         max.push(filter.max);
+        numberPressed.push(0);
       }
       if (this.max != max) { this.max = max; }
+      if (this.numberPressed.length != 0) { this.numberPressed = numberPressed; }
       console.log(this.max);
       return a
     },
-    numberPressed: 0
+    numberPressed: []
   });
 })();
 </script>
