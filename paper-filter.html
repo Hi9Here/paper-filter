@@ -117,7 +117,7 @@
       var outputNum = [];
       var max = 0;
       if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {
-        var obj_filter = {}
+        var obj_filters = {}
         if (index  > 0) {
           for (var i = 0,l = index - 1; i < l; i++) {
             if (this.obj_filters.hasOwnProperty(this.by.split(',')[i])) {
