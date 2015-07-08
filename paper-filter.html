@@ -33,9 +33,9 @@
   <div index="{{index}}">
     <template is="dom-repeat" items="{{item}}">
        <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
-          <span>{{x.name}}</span>
+          <span>{{item.name}}</span>
           <template is="dom-if" if="{{show_numbers}}">
-            <span class="mini-badge">{{x.num}}</span>
+            <span class="mini-badge">{{item.num}}</span>
           </template>
        </paper-button>
     </template>
