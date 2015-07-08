@@ -246,7 +246,7 @@
         var by = this.by.split(',')[i];
         var filter = this.justProperties(output,i)
         if (i === 0) { 
-          this.top_filter = filter;
+          this.top_filter = filter.value;
         }
         a.push(filter.value);
         max.push(filter.max);
