@@ -29,11 +29,14 @@
   </style>
 
 <template>
-  <template is="dom-repeat" items="{{filters}}" indexAs="n" as="filter">
+  <template is="dom-repeat" items="{{filters}}">
   <div index="{{index}}">
-    <template is="dom-repeat" items="{{filter}}" as="x" >
-       <paper-button raised="{{!x.filtered}}" on-tap="setFilter" title="{{x.name}}">
-          <span>{{x.name}}</span> <span class="mini-badge">{{x.num}}</span>
+    <template is="dom-repeat" items="{{item}}">
+       <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
+          <span>{{x.name}}</span>
+          <template is="dom-if" if="{{show_numbers}}">
+            <span class="mini-badge">{{x.num}}</span>
+          </template>
        </paper-button>
     </template>
   </div>
@@ -83,10 +86,9 @@
         type: Array,
         value: []
       },
-      top_filters: {
+      top_filter: {
         type: Array,
-        notify: true,
-        readOnly: true
+        notify: true
       },
       obj_filters: {
         type: Object,
