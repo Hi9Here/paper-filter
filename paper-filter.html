@@ -269,8 +269,11 @@
       return a;
     },
     computeString:function (obj_filters) {
-      debugger;
-      
+      if (this.obj_filters.hasOwnProperty("type")){
+        return "for "+obj_filters.type;
+      } else {
+        return "";
+      }
     },
     numberPressed: []
   });
