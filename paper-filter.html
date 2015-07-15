@@ -268,7 +268,7 @@
       return a;
     },
     computeString: function (objFilters) {
-      if (this.objFilters.hasOwnProperty("type")){
+      if (objFilters.hasOwnProperty("type")){
         return "for "+objFilters.type;
       } else {
         return "";
