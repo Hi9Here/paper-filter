@@ -17,7 +17,7 @@
   paper-button{
     background: var(--accent-color);
   }
-  paper-button[raised] {
+  paper-button.notpicked {
     background: #fff;
   }
   .mini-badge {
@@ -35,7 +35,7 @@
   <template is="dom-repeat" items="{{filters}}">
   <div index="{{index}}">
     <template is="dom-repeat" items="{{item}}">
-       <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
+       <paper-button raised="{{!item.filtered}}" class="{{add_if("filtered",item.filtered)}}" on-tap="setFilter" title="{{item.name}}">
           <span>{{item.name}}</span>
           <template is="dom-if" if="{{showNumbers}}">
             <span class="mini-badge">{{item.num}}</span>
@@ -116,6 +116,9 @@
       }
     },
     observers: ['outputChanged(data.*)'],
+    add_if: function(text,condition) {
+      if (condition) return text;
+    },
     outputChanged: function(data) {
       this.filters = this.getFilters(); 
       this.output = this.justOfTypes(this.data, this.obj_filters);
