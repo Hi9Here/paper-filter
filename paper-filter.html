@@ -113,10 +113,6 @@
       },
       max: { 
         type: Array
-      },
-      filterToString: {
-        computed: 'computeString(obj_filters)',
-        notify: true
       }
     },
     observers: ['outputChanged(data.*)'],
@@ -270,13 +266,6 @@
       if (this.numberPressed.length === 0) { this.numberPressed = numberPressed; }
       //TODO clear not showing filters
       return a;
-    },
-    computeString: function (objFilters) {
-      if (objFilters.hasOwnProperty("type")){
-        return "for "+objFilters.type;
-      } else {
-        return "";
-      }
     },
     numberPressed: []
   });
