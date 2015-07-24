@@ -100,19 +100,13 @@
         type: Object,
         value: {}
       },
-      by: {
-        type: String
-      },
+      by: String,
       output: {
         type: Array,
         notify: true
       },
-      data: {
-        type: Array
-      },
-      max: { 
-        type: Array
-      }
+      data: Array,
+      max: Array
     },
     observers: ['outputChanged(data.*)'],
     add_if: function(text,condition) {
@@ -123,7 +117,6 @@
       this.output = this.justOfTypes(this.data, this.obj_filters);
     },
     justProperties: function(data, index) {
-      console.log('justProperties');
       var properties = this.by.split(',')[index];
       var numberPressed = 0
       if (this.numberPressed.length >= index) {
@@ -174,9 +167,6 @@
       result.sort(function(a, b) {
         return b.num - a.num;
       });
-      
-      console.log(result);
-      console.log(max);
       
       return {value :result, max: max};
     },
@@ -248,7 +238,6 @@
       var a = [];
       var max = [];
       var numberPressed = [];
-      
       var output = this.data;
       
       for (var i = 0,l = this.by.split(',').length; i < l; i++) {
