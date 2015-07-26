@@ -6,7 +6,7 @@
 To use 
 ```<paper-filter data="[[data]]"  by="type,subtype" output="{{output}}" ></paper-filter>```
 
-```data``` : A Array of Objects with common properties.
+```data``` : An Array of Objects with common properties.
 
 ```by``` : A comma seperated list of properties to filter by.
 
