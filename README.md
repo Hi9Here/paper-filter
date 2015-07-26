@@ -4,7 +4,13 @@
 ### [Video](https://youtu.be/WrCGgaq62bc)
 
 To use 
-```<paper-filter data="[[data]]"  by="type,subtype" output="{{output}}" ></paper-filter>```
+```
+<paper-filter
+  data="[[data]]"
+  by="type,subtype"
+  output="{{output}}" >
+</paper-filter>
+```
 
 ```data``` : An Array of Objects with common properties.
 
