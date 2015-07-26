@@ -1,7 +1,7 @@
 # paper-filter
 ## A Polymer paper button based filter for a Array of Objects with common properties.
 
-### [video](https://youtu.be/WrCGgaq62bc)
+### [Video](https://youtu.be/WrCGgaq62bc)
 
 To use 
 ```<paper-filter data="[[data]]"  by="type,subtype" output="{{output}}" ></paper-filter>```
