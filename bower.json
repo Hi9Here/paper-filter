@@ -1,0 +1,26 @@
+{
+  "name": "paper-filter",
+  "version": "0.0.1",
+  "homepage": "https://github.com/HackITtoday/paper-filter",
+  "description": "Polymer 1.0 paper-filter for filtering a Array of Objects with common properties.",
+  "main": "paper-filter.html",
+  "keywords": [
+    "web-components",
+    "Polymer"
+  ],
+  "authors": [
+    "Marcus7777@gmail.com"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "~1.0.8",
+    "paper-button": "PolymerElements/paper-button#~1.0.3"
+  }
+}
