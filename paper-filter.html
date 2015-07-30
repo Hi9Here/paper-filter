@@ -98,7 +98,8 @@
       obj_filters: {
         type: Object,
         value: {},
-        notify: true
+        notify: true,
+        observer: "setAllFilters"
       },
       by: String,
       output: {
@@ -201,12 +202,33 @@
         return output;
       }
     },
+    setAllFilters () {
+      for (var by in this.obj_filters) {
+        if (this.obj_filters.hasOwnProperty(by)) {
+          var obj = this.obj_filters[by];
+          for (var title in obj) {
+            if(obj.hasOwnProperty(title)){
+              if (obj[title] === true) {
+                _setFilter(title,by,20); // max set to 20
+              }
+            }
+          }
+        }
+      }
+      this.filters = this.getFilters(); 
+      this.output = this.justOfTypes(this.data, this.obj_filters);
+    },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
       var index = +e.currentTarget.parentElement.index;
       var by = this.by.split(',')[index];
       var max = +this.max[index];
+      this._setFilter(title,by,max)
       
+      this.filters = this.getFilters(); 
+      this.output = this.justOfTypes(this.data, this.obj_filters);
+    },
+    _setFilter: function(title,by,max) {
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
           delete this.obj_filters[by][title];
@@ -231,8 +253,6 @@
         this.obj_filters[by][title] = true;
         this.numberPressed[index]++
       }
-      this.filters = this.getFilters(); 
-      this.output = this.justOfTypes(this.data, this.obj_filters);
     },
     getFilters: function () {
       var a = [];
