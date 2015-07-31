@@ -114,8 +114,8 @@
       if (condition) return text;
     },
     outputChanged: function(data) {
-      this.filters = this.getFilters(); 
-      this.output = this.justOfTypes(this.data, this.obj_filters);
+      this.filters = this.getFilters(); //TODO smelly code
+      this.output = this.justOfTypes(this.data, this.obj_filters); //TODO smelly code
     },
     justProperties: function(data, index) {
       var properties = this.by.split(',')[index];
@@ -215,8 +215,6 @@
           }
         }
       }
-      this.filters = this.getFilters(); 
-      this.output = this.justOfTypes(this.data, this.obj_filters);
     },
     setFilter: function(e) {
       var title  = e.currentTarget.getAttribute('title');
@@ -225,8 +223,8 @@
       var max = +this.max[index];
       this._setFilter(title,by,max)
       
-      this.filters = this.getFilters(); 
-      this.output = this.justOfTypes(this.data, this.obj_filters);
+      this.filters = this.getFilters(); //TODO smelly code
+      this.output = this.justOfTypes(this.data, this.obj_filters); //TODO smelly code
     },
     _setFilter: function(title,by,max) {
       if (this.obj_filters.hasOwnProperty(by)) {
