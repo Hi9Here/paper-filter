@@ -221,12 +221,12 @@
       var index = +e.currentTarget.parentElement.index;
       var by = this.by.split(',')[index];
       var max = +this.max[index];
-      this._setFilter(title,by,max)
+      this._setFilter(title,by,max,index)
       
       this.filters = this.getFilters(); //TODO smelly code
       this.output = this.justOfTypes(this.data, this.obj_filters); //TODO smelly code
     },
-    _setFilter: function(title,by,max) {
+    _setFilter: function(title,by,max,index) {
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
           delete this.obj_filters[by][title];
