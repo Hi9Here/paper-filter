@@ -107,7 +107,8 @@
         notify: true
       },
       data: Array,
-      max: Array
+      max: Array,
+      log: Boolean
     },
     observers: ['outputChanged(data.*)'],
     add_if: function(text,condition) {
