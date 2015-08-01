@@ -205,8 +205,9 @@
     },
     setAllFilters () {
       var index = 0
+      var byArray = this.by.split(',');
       for (var by in this.obj_filters) {
-        index = this.by.split(',').indexOf(by);
+        index = byArray.indexOf(by);
         if (this.obj_filters.hasOwnProperty(by)) {
           var obj = this.obj_filters[by];
           for (var title in obj) {
