@@ -98,8 +98,8 @@
       obj_filters: {
         type: Object,
         value: {},
-        notify: true,
-        observer: "setAllFilters"
+        notify: true //,
+        // observer: "setAllFilters"
       },
       by: String,
       output: {
@@ -228,9 +228,6 @@
       var by = this.by.split(',')[index];
       var max = +this.max[index];
       this._setFilter(title,by,max,index)
-      
-      this.filters = this.getFilters(); //TODO smelly code
-      this.output = this.justOfTypes(this.data, this.obj_filters); //TODO smelly code
     },
     _setFilter: function(title,by,max,index) {
       if (this.obj_filters.hasOwnProperty(by)) {
