@@ -112,7 +112,9 @@
         type:Number,
         computed: 'getTotalPressed(numberPressed)'
       },
-      log: Boolean
+      log: {
+        type: Boolean, value: false
+      }
     },
     getTotalPressed: function(numberPressed) {
       var total = 0;
