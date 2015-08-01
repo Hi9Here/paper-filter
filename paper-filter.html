@@ -94,13 +94,13 @@
       },
       obj_filters: {
         type: Object,
-        notify: true //,
-        // observer: "render"
+        notify: true,
+        observer: "render"
       },
       by: {type:  String},
       output: {
         notify: true,
-        computed: "justOfTypes(data,obj_filters)"
+        computed: 'justOfTypes(data,obj_filters)'
       },
       data:{type:  Array},
       max:{type:  Array},
@@ -274,7 +274,9 @@
       //TODO clear not showing filters
       return a;
     },
-    numberPressed: []
+    render: function () {
+      //TODO
+    }
   });
 })();
 </script>
