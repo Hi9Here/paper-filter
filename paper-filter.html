@@ -33,7 +33,7 @@
   }
   </style>
   <template>
-    <template is="dom-repeat" items="{{filters}}">
+    <template is="dom-repeat" items="{{filters}}" id="filter">
       <div index="{{index}}">
         <template is="dom-repeat" items="{{item}}">
           <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
@@ -84,56 +84,47 @@
   }
   Polymer({
     is: 'paper-filter',
-    properties: {
-      filters: {
-        computed: "getFilters"
+    properties:{
+      filters:{
+        computed: "getFilters(data,byArray)"
       },
-      top_filter: {
+      top_filter:{
         type: Array,
         notify: true
       },
-      obj_filters: {
+      obj_filters:{
         type: Object,
         notify: true,
         observer: "render"
       },
-      by: {type:  String},
-      output: {
+      by:{type:  String},
+      byArray:{
+        computed: 'getByArray(by)'
+      },
+      output:{
         notify: true,
         computed: 'justOfTypes(data,obj_filters)'
       },
-      data:{type:  Array},
-      max:{type:  Array},
-      numberPressed: {type:  Array},
-      totalPressed: {
-        computed: 'getTotalPressed(numberPressed)'
-      }
+      data:{type:Array},
+      max:{type:Array},
+      numberPressed:{type:Array,value:[]}
     },
-    getTotalPressed: function(numberPressed) {
-      var total = 0;
-      for (var pressed in numberPressed) {
-        total = pressed + total;
-      }
-      return total;
+    getByArray: function(by) {
+      return by.split(',');
     },
-    justProperties: function(data, index) {
-      var properties = this.by.split(',')[index];
-      var numberPressed = 0
-      if (this.numberPressed.length >= index) {
-        numberPressed = this.numberPressed[index];
-      }
+    justProperties: function(data, properties, numberPressed, index) {
       var output = [];
       var outputNum = [];
       var max = 0;
-      if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {
-        var obj_filters = {}
-        if (index  > 0) {
+      if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {// garding
+        var obj_filters = {};
+        if (index  > 0) { // perform the filters that come before
           for (var i = 0,l = index; i < l; i++) {
-            if (this.obj_filters.hasOwnProperty(this.by.split(',')[i])) {
-              obj_filters[this.by.split(',')[i]] = this.obj_filters[this.by.split(',')[i]];
+            if (this.obj_filters.hasOwnProperty(properties)) {
+              obj_filters[properties] = this.obj_filters[properties];
             }
           }
-          data = this.justOfTypes(data,obj_filters);
+          data = this.justOfTypes(data, obj_filters);
         }
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
@@ -253,29 +244,31 @@
         this.numberPressed[index]++
       }
     },
-    getFilters: function () {
+    getFilters: function (data, byArray) {
       var a = [];
       var max = [];
       var numberPressed = [];
-      var output = this.data;
+      var output = data;
       
-      for (var i = 0,l = this.by.split(',').length; i < l; i++) {
-        var by = this.by.split(',')[i];
-        var filter = this.justProperties(output,i)
+      for (var i = 0,l = byArray.length; i < l; i++) {
+        var by = byArray[i];
+        var filter = this.justProperties(output,by,numberPressed[i],i);
         if (i === 0) { 
-          this.top_filter = filter.value;
+          this.top_filter = filter.value; // side affect
         }
         a.push(filter.value);
-        max.push(filter.max);
-        numberPressed.push(0);
+        max.push(filter.max);// side affect
+        numberPressed.push(0);// side affect
       }
-      if (this.max != max) { this.max = max; }
+      if (this.max !== max) {this.max = max}; 
       if (this.numberPressed.length === 0) { this.numberPressed = numberPressed; }
       //TODO clear not showing filters
       return a;
     },
     render: function () {
       //TODO
+      this.$.filter.render()
+
     }
   });
 })();
