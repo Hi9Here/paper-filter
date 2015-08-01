@@ -204,13 +204,15 @@
       }
     },
     setAllFilters () {
+      var index = 0
       for (var by in this.obj_filters) {
+        index = this.by.split(',').indexOf(by);
         if (this.obj_filters.hasOwnProperty(by)) {
           var obj = this.obj_filters[by];
           for (var title in obj) {
             if(obj.hasOwnProperty(title)){
               if (obj[title] === true) {
-                this._setFilter(title,by,20); // max set to 20
+                this._setFilter(title,by,20,index); // max set to 20
               }
             }
           }
