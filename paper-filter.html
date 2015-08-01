@@ -1,7 +1,6 @@
 <link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id='paper-filter'> 
-
   <style>
   :host {
     max-height: 142px;
@@ -17,7 +16,7 @@
     background: var(--accent-color);
   }
   paper-button[raised] {
-    background: #fff !important;;
+    background: #fff !important;
   }
   :host div+div paper-button {
     font-size: .9em;
@@ -33,7 +32,6 @@
     border-radius: 10px;
   }
   </style>
-
   <template>
     <template is="dom-repeat" items="{{filters}}">
       <div index="{{index}}">
@@ -89,7 +87,7 @@
     properties: {
       filters: {
         type: Array,
-        value: []
+        computed: "getFilters"
       },
       top_filter: {
         type: Array,
@@ -104,19 +102,24 @@
       by: String,
       output: {
         type: Array,
-        notify: true
+        notify: true,
+        computed: "justOfTypes(data,obj_filters)"
       },
       data: Array,
       max: Array,
+      numberPressed: Array,
+      totalPressed: {
+        type:Number,
+        computed: 'getTotalPressed(numberPressed)'
+      },
       log: Boolean
     },
-    observers: ['outputChanged(data.*)'],
-    add_if: function(text,condition) {
-      if (condition) return text;
-    },
-    outputChanged: function(data) {
-      this.filters = this.getFilters(); //TODO smelly code
-      this.output = this.justOfTypes(this.data, this.obj_filters); //TODO smelly code
+    getTotalPressed: function(numberPressed) {
+      var total = 0;
+      for (var pressed in numberPressed) {
+        total = pressed + total;
+      }
+      return total;
     },
     justProperties: function(data, index) {
       var properties = this.by.split(',')[index];
@@ -190,20 +193,20 @@
       if (data === null || data === undefined) {
         return [];
       }
-      if (this.numberPressed == 0) return data
-      if (obj_filters === undefined || isEmpty(obj_filters)) {
+      if (this.totalPressed == 0) return data
+      if (obj_filters === undefined || isEmpty(obj_filters)) { // no filtering needed
         return data;
       } else {
         var output = [];
         for (var entry = 0, l = data.length; entry < l; entry++) {
-          if (hasTypes(data[entry],obj_filters)) {
+          if (hasTypes(data[entry],obj_filters)) { // This is the filter
             output.push(data[entry]); 
           }
         };
         return output;
       }
     },
-    setAllFilters () {
+    setAllFilters: function() {
       if (this.by !== undefined) {
         var index = 0
         var byArray = this.by.split(',');
