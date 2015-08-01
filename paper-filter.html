@@ -86,7 +86,6 @@
     is: 'paper-filter',
     properties: {
       filters: {
-        type: Array,
         computed: "getFilters"
       },
       top_filter: {
@@ -95,13 +94,11 @@
       },
       obj_filters: {
         type: Object,
-        value: {},
         notify: true //,
-        // observer: "setAllFilters"
+        // observer: "render"
       },
       by: String,
       output: {
-        type: Array,
         notify: true,
         computed: "justOfTypes(data,obj_filters)"
       },
@@ -109,7 +106,6 @@
       max: Array,
       numberPressed: Array,
       totalPressed: {
-        type:Number,
         computed: 'getTotalPressed(numberPressed)'
       }
     },
