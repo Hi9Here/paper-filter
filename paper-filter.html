@@ -97,13 +97,13 @@
         notify: true //,
         // observer: "render"
       },
-      by: String,
+      by: {type:  String},
       output: {
         notify: true,
         computed: "justOfTypes(data,obj_filters)"
       },
-      data: Array,
-      max: Array,
+      data:{type:  Array},
+      max:{type:  Array},
       numberPressed: Array,
       totalPressed: {
         computed: 'getTotalPressed(numberPressed)'
