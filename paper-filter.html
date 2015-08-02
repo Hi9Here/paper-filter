@@ -118,18 +118,20 @@
       for (var i = 0,l = byArray.length; i < l; i++) {
         var by = byArray;
         var list = [];
-        var filters = getFilters(data,byArray,{});
-
+        var filters = this.getFilters(data,byArray,{});
+        debugger;
         for (var index = 0,length = filters.length; index < l; index++) {
-          var property = properties[index];
+          var filter = filters[index];
+          debugger;
           list.pull(justOfTypes(data,filter))
         }
         // list.sort closist to data.length / 2 at top
         
         for (var index = 0,length = list.length; index < l; index++) {
           //make data grid
-
+          debugger;
         }
+
       }
     },
     getByArray: function(by) {
@@ -178,11 +180,13 @@
           filtered: this.ifFiltered(output[a], properties, numberPressed)
         };
       }
+
       function closistTo(numb) {
         return function(a, b) {
           return ((numb-a.num)^2) - ((numb-b.num)^2);
         }
       }
+
       result.sort(closistTo(output.length/2));
       
       return {value :result, max: max};
