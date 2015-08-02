@@ -2,40 +2,40 @@
 
 <dom-module id='paper-filter'> 
   <style>
-  :host {
-    max-height: 142px;
-    display: block;
-    overflow: hidden;
-  }
-  paper-button {
-    background: #fff;
-    min-width: 172px;
-    margin: 0px 2px 6px;
-  }
-  paper-button {
-    background: var(--accent-color);
-  }
-  paper-button[raised] {
-    background: #fff !important;
-  }
-  :host div+div paper-button {
-    font-size: .9em;
-    min-width:106px;
-  }
-  .mini-badge {
-    display: inline-block;
-    min-width: 10px;
-    padding: 3px 7px;
-    color: #FFF;
-    vertical-align: baseline;   
-    background-color: #6F6F6F;
-    border-radius: 10px;
-  }
+    :host {
+      max-height: 142px;
+      display: block;
+      overflow: hidden;
+    }
+    paper-button {
+      background: #fff;
+      min-width: 172px;
+      margin: 0px 2px 6px;
+    }
+    paper-button {
+      background: var(--accent-color);
+    }
+    paper-button[raised] {
+      background: #fff !important;
+    }
+    :host div+div paper-button {
+      font-size: .9em;
+      min-width:106px;
+    }
+    .mini-badge {
+      display: inline-block;
+      min-width: 10px;
+      padding: 3px 7px;
+      color: #FFF;
+      vertical-align: baseline;   
+      background-color: #6F6F6F;
+      border-radius: 10px;
+    }
   </style>
   <template>
-    <template is="dom-repeat" items="{{filters}}" id="filter">
+    <template is="dom-repeat" items="{{filters}}">
       <div index="{{index}}">
-        <template is="dom-repeat" items="{{item}}">
+        <template is="dom-repeat" items="{{item}}" class="filter">
           <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
             <span>{{item.name}}</span>
             <template is="dom-if" if="{{showNumbers}}">
@@ -86,18 +86,18 @@
     is: 'paper-filter',
     properties:{
       filters:{
-        computed: "getFilters(data,byArray)"
+        computed: 'getFilters(data,byArray,obj_filters)'
       },
       top_filter:{
         type: Array,
-        notify: true
+        notify: true,
+        computed: 'justProperties(data, byArray[0], 0, 0, obj_filters)'
       },
       obj_filters:{
         type: Object,
-        notify: true,
-        observer: "render"
+        notify: true
       },
-      by:{type:  String},
+      by:String,
       byArray:{
         computed: 'getByArray(by)'
       },
@@ -105,26 +105,27 @@
         notify: true,
         computed: 'justOfTypes(data,obj_filters)'
       },
-      data:{type:Array},
-      max:{type:Array},
-      numberPressed:{type:Array,value:[]}
+      data:Array,
+      max:Array,
+      numberPressed:{type:Array,value:[]},
+      observers: ["render(obj_filters.*)"]
     },
     getByArray: function(by) {
       return by.split(',');
     },
-    justProperties: function(data, properties, numberPressed, index) {
+    justProperties: function(data, properties, numberPressed, index, obj_filters) {
       var output = [];
       var outputNum = [];
       var max = 0;
       if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {// garding
-        var obj_filters = {};
+        var _obj_filters = {};
         if (index  > 0) { // perform the filters that come before
           for (var i = 0,l = index; i < l; i++) {
-            if (this.obj_filters.hasOwnProperty(properties)) {
-              obj_filters[properties] = this.obj_filters[properties];
+            if (obj_filters.hasOwnProperty(properties)) {
+              _obj_filters[properties] = obj_filters[properties];
             }
           }
-          data = this.justOfTypes(data, obj_filters);
+          data = this.justOfTypes(data, _obj_filters);
         }
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
@@ -176,6 +177,10 @@
       }
     },
     justOfTypes: function(data, obj_filters){ 
+      if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
+        obj_filters = obj_filters.value;
+      }
+
       if (data === null || data === undefined) {
         return [];
       }
@@ -192,33 +197,11 @@
         return output;
       }
     },
-    setAllFilters: function() {
-      if (this.by !== undefined) {
-        var index = 0
-        var byArray = this.by.split(',');
-        for (var by in this.obj_filters) {
-          index = byArray.indexOf(by);
-          if (this.obj_filters.hasOwnProperty(by)) {
-            var obj = this.obj_filters[by];
-            for (var title in obj) {
-              if(obj.hasOwnProperty(title)){
-                if (obj[title] === true) {
-                  this._setFilter(title,by,20,index); // max set to 20
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     setFilter: function(e) {
-      var title  = e.currentTarget.getAttribute('title');
+      var title = e.currentTarget.getAttribute('title');
       var index = +e.currentTarget.parentElement.index;
-      var by = this.by.split(',')[index];
+      var by = this.byArray[index];
       var max = +this.max[index];
-      this._setFilter(title,by,max,index)
-    },
-    _setFilter: function(title,by,max,index) {
       if (this.obj_filters.hasOwnProperty(by)) {
         if (this.obj_filters[by].hasOwnProperty(title)) {
           delete this.obj_filters[by][title];
@@ -243,19 +226,16 @@
         this.obj_filters[by][title] = true;
         this.numberPressed[index]++
       }
+      this.render();
     },
-    getFilters: function (data, byArray) {
+    getFilters: function (data, byArray, obj_filters) {
       var a = [];
       var max = [];
       var numberPressed = [];
       var output = data;
       
       for (var i = 0,l = byArray.length; i < l; i++) {
-        var by = byArray[i];
-        var filter = this.justProperties(output,by,numberPressed[i],i);
-        if (i === 0) { 
-          this.top_filter = filter.value; // side affect
-        }
+        var filter = this.justProperties(output, byArray[i], numberPressed[i], i, obj_filters);
         a.push(filter.value);
         max.push(filter.max);// side affect
         numberPressed.push(0);// side affect
@@ -263,12 +243,14 @@
       if (this.max !== max) {this.max = max}; 
       if (this.numberPressed.length === 0) { this.numberPressed = numberPressed; }
       //TODO clear not showing filters
-      return a;
+      this.render();
+      return a; 
     },
-    render: function () {
-      //TODO
-      this.$.filter.render()
-
+    render: function (o) {
+      var f = document.querySelectorAll('template.filter'); 
+      for (var i = 0, l = f.length; i < l; i++) {
+        f[i].render()
+      };
     }
   });
 })();
