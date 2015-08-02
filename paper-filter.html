@@ -106,9 +106,31 @@
         computed: 'justOfTypes(data,obj_filters)'
       },
       data:Array,
+      dataGrid:{
+        type:Object,
+        computed: 'getDataGrid(data,byArray)'
+      },
       max:Array,
       numberPressed:{type:Array,value:[]},
       observers: ["render(obj_filters.*)"]
+    },
+    getDataGrid: function(data,byArray) {
+      for (var i = 0,l = byArray.length; i < l; i++) {
+        var by = byArray;
+        var list = [];
+        var filters = getFilters(data,byArray,{});
+
+        for (var index = 0,length = filters.length; index < l; index++) {
+          var property = properties[index];
+          list.pull(justOfTypes(data,filter))
+        }
+        // list.sort closist to data.length / 2 at top
+        
+        for (var index = 0,length = list.length; index < l; index++) {
+          //make data grid
+
+        }
+      }
     },
     getByArray: function(by) {
       return by.split(',');
@@ -156,9 +178,12 @@
           filtered: this.ifFiltered(output[a], properties, numberPressed)
         };
       }
-      result.sort(function(a, b) {
-        return b.num - a.num;
-      });
+      function closistTo(numb) {
+        return function(a, b) {
+          return ((numb-a.num)^2) - ((numb-b.num)^2);
+        }
+      }
+      result.sort(closistTo(output.length/2));
       
       return {value :result, max: max};
     },
