@@ -1,5 +1,4 @@
 <link rel="import" href="../paper-button/paper-button.html">
-
 <dom-module id='paper-filter'> 
   <style>
     :host {
@@ -36,7 +35,7 @@
     <template is="dom-repeat" items="{{filters}}">
       <div index="{{index}}">
         <template is="dom-repeat" items="{{item}}" class="filter">
-          <paper-button raised="{{!item.filtered}}" on-tap="setFilter" title="{{item.name}}">
+          <paper-button raised="{{!item.filtered}}" on-tap="setFilter" data-max="{{item.max}}" title="{{item.name}}">
             <span>{{item.name}}</span>
             <template is="dom-if" if="{{showNumbers}}">
               <span class="mini-badge">{{item.num}}</span>
@@ -105,39 +104,48 @@
         notify: true,
         computed: 'justOfTypes(data,obj_filters)'
       },
-      data:Array,
-      dataGrid:{
-        type:Object,
-        computed: 'getDataGrid(data,byArray)'
-      },
-      max:Array,
-      numberPressed:{type:Array,value:[]},
-      observers: ["render(obj_filters.*)"]
+      data:Array//,
+//      dataGrid:{
+//        type:Object,
+//        computed: 'getDataGrid(data,byArray)'
+//      },
     },
-    getDataGrid: function(data,byArray) {
+    observers: ["render(obj_filters.*)"], //,"getDataGrid(data, byArray)"]
+/*    getDataGrid: function(data,byArray) {// not used for later if speed is needed
+      var obj_filter = {};
       for (var i = 0,l = byArray.length; i < l; i++) {
-        var by = byArray;
+        var by = byArray[i];
         var list = [];
         var filters = this.getFilters(data,byArray,{});
-        debugger;
-        for (var index = 0,length = filters.length; index < l; index++) {
-          var filter = filters[index];
-          debugger;
-          list.pull(justOfTypes(data,filter))
+        obj_filter[by] = {};
+       // debugger;
+        for (var i_2 = 0,l_2 = filters.length; i_2 < l_2; i_2++) {
+          var filter = filters[i_2];
+          for (var i_3 = 0,l_3 = filter.length; i_3 < l_3; i_3++) {
+            obj_filter = this._setFilter(filters[i_2][i_3].name, i, by, filters[i_2][i_3].max, obj_filter);
+            comb = this.justOfTypes(data, obj_filter);
+            if (comb.length > 0) {
+              list.push(comb);
+            }
+
+          }
         }
-        // list.sort closist to data.length / 2 at top
         
-        for (var index = 0,length = list.length; index < l; index++) {
+        for (var i_2 = 0,l_2 = list.length; i_2 < l; i_2++) {
           //make data grid
           debugger;
+          console.log(list[i_2]);
         }
 
       }
-    },
+    },*/
     getByArray: function(by) {
       return by.split(',');
     },
     justProperties: function(data, properties, numberPressed, index, obj_filters) {
+      if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
+        obj_filters = obj_filters.value;
+      }
       var output = [];
       var outputNum = [];
       var max = 0;
@@ -177,7 +185,8 @@
         result[a] = {
           name: output[a],
           num: outputNum[a],
-          filtered: this.ifFiltered(output[a], properties, numberPressed)
+          filtered: this.ifFiltered(output[a], properties, numberPressed),
+          max: max
         };
       }
 
@@ -189,7 +198,7 @@
 
       result.sort(closistTo(output.length/2));
       
-      return {value :result, max: max};
+      return result;
     },
     ifFiltered: function(name, properties, numberPressed) {
       if (numberPressed == 0) {
@@ -209,11 +218,14 @@
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
         obj_filters = obj_filters.value;
       }
-
+      var totalPressed = 0;
+      for (by in obj_filters) {
+        totalPressed = totalPressed + Object.keys(obj_filters[by]).length;
+      }
       if (data === null || data === undefined) {
         return [];
       }
-      if (this.totalPressed == 0) return data
+      if (totalPressed === 0) return data
       if (obj_filters === undefined || isEmpty(obj_filters)) { // no filtering needed
         return data;
       } else {
@@ -230,50 +242,46 @@
       var title = e.currentTarget.getAttribute('title');
       var index = +e.currentTarget.parentElement.index;
       var by = this.byArray[index];
-      var max = +this.max[index];
-      if (this.obj_filters.hasOwnProperty(by)) {
-        if (this.obj_filters[by].hasOwnProperty(title)) {
-          delete this.obj_filters[by][title];
-          if (isEmpty(this.obj_filters[by])) {
-            delete this.obj_filters[by];
-            this.numberPressed[index]--
+      var max = +e.currentTarget.dataMax;
+      this.obj_filters = this._setFilter(title, index, by, max, this.obj_filters);
+    },   
+    _setFilter: function(title, index, by, max, obj_filters) {
+      var numberPressed = Object.keys(obj_filters[by]).length;
+      if (obj_filters.hasOwnProperty(by)) {
+        if (obj_filters[by].hasOwnProperty(title)) {
+          delete obj_filters[by][title];
+          if (isEmpty(obj_filters[by])) {
+            delete obj_filters[by];
           }
         } else {
-          if (max === this.numberPressed[index]) {
-            this.obj_filters[by] = {};
-            this.numberPressed[index] = max;
-          } else {
-            this.numberPressed[index]++
+          if (max === numberPressed) {
+            obj_filters[by] = {};
           }
-          this.obj_filters[by][title] = true;
+          obj_filters[by][title] = true;
         }
       } else {
-        if (this.obj_filters === undefined) {
-          this.obj_filters = {};
+        if (obj_filters === undefined) {
+          obj_filters = {};
         }
-        this.obj_filters[by] = {};
-        this.obj_filters[by][title] = true;
-        this.numberPressed[index]++
+        obj_filters[by] = {};
+        obj_filters[by][title] = true;
       }
-      this.render();
+      return obj_filters;
     },
     getFilters: function (data, byArray, obj_filters) {
-      var a = [];
-      var max = [];
+      if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
+        obj_filters = obj_filters.value;
+      }
+      var output = [];
       var numberPressed = [];
-      var output = data;
       
       for (var i = 0,l = byArray.length; i < l; i++) {
-        var filter = this.justProperties(output, byArray[i], numberPressed[i], i, obj_filters);
-        a.push(filter.value);
-        max.push(filter.max);// side affect
-        numberPressed.push(0);// side affect
+        var filter = this.justProperties(data, byArray[i], numberPressed[i], i, obj_filters);
+        output.push(filter);
       }
-      if (this.max !== max) {this.max = max}; 
-      if (this.numberPressed.length === 0) { this.numberPressed = numberPressed; }
       //TODO clear not showing filters
       this.render();
-      return a; 
+      return output; 
     },
     render: function (o) {
       var f = document.querySelectorAll('template.filter'); 
