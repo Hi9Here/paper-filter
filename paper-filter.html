@@ -90,7 +90,7 @@
       top_filter:{
         type: Array,
         notify: true,
-        computed: 'justProperties(data, byArray[0], 0, 0, obj_filters)'
+        computed: 'justProperties(data, byArray[0], 0, 0, obj_filters, byArray)'
       },
       obj_filters:{
         type: Object,
@@ -141,7 +141,7 @@
     getByArray: function(by) {
       return by.split(',');
     },
-    justProperties: function(data, properties, numberPressed, index, obj_filters) {
+    justProperties: function(data, properties, numberPressed, index, obj_filters, byArray) {
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
         obj_filters = obj_filters.value;
       }
@@ -150,14 +150,13 @@
       var max = 0;
       if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {// garding
         var _obj_filters = {};
-        if (index  > 0) { //TODO perform the filters that come before needs work
-          for (var i = 0,l = index; i < l; i++) {
-            if (obj_filters.hasOwnProperty(properties)) {
-              _obj_filters[properties] = obj_filters[properties];
-            }
+        //TODO perform the filters that come before needs work
+        for (var i = 0; i < index; i++) {
+          if (obj_filters.hasOwnProperty(byArray[i])) {
+            _obj_filters[byArray[i]] = obj_filters[byArray[i]];
           }
-          data = this.justOfTypes(data, _obj_filters);
         }
+        data = this.justOfTypes(data, _obj_filters);// TODO if all are in a filter set it as true
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
             output.push(entryA);
@@ -279,7 +278,7 @@
       var numberPressed = [];
       
       for (var i = 0,l = byArray.length; i < l; i++) {
-        var filter = this.justProperties(data, byArray[i], numberPressed[i], i, obj_filters);
+        var filter = this.justProperties(data, byArray[i], numberPressed[i], i, obj_filters, byArray);
         output.push(filter);
       }
       //TODO clear not showing filters
