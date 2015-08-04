@@ -110,7 +110,6 @@
 //        computed: 'getDataGrid(data,byArray)'
 //      },
     },
-    observers: ["render(obj_filters.*)"], //,"getDataGrid(data, byArray)"]
 /*    getDataGrid: function(data,byArray) {// not used for later if speed is needed
       var obj_filter = {};
       for (var i = 0,l = byArray.length; i < l; i++) {
@@ -151,7 +150,7 @@
       var max = 0;
       if (data !== undefined && data !== null && Array.isArray(data) && data.length > 1) {// garding
         var _obj_filters = {};
-        if (index  > 0) { // perform the filters that come before
+        if (index  > 0) { //TODO perform the filters that come before needs work
           for (var i = 0,l = index; i < l; i++) {
             if (obj_filters.hasOwnProperty(properties)) {
               _obj_filters[properties] = obj_filters[properties];
@@ -243,10 +242,14 @@
       var index = +e.currentTarget.parentElement.index;
       var by = this.byArray[index];
       var max = +e.currentTarget.dataMax;
-      this.obj_filters = this._setFilter(title, index, by, max, this.obj_filters);
+      var obj_filters = this._setFilter(title, index, by, max, this.obj_filters);
+      this.set("obj_filters",obj_filters);
     },   
     _setFilter: function(title, index, by, max, obj_filters) {
-      var numberPressed = Object.keys(obj_filters[by]).length;
+      var numberPressed = 0;
+      if (Object.keys(obj_filters).indexOf(by)) {
+        var numberPressed = Object.keys(obj_filters[by]).length;
+      }
       if (obj_filters.hasOwnProperty(by)) {
         if (obj_filters[by].hasOwnProperty(title)) {
           delete obj_filters[by][title];
