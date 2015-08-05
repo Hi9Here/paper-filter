@@ -96,6 +96,7 @@
         type: Object,
         notify: true
       },
+      /* by The comma separated value */
       by:String,
       byArray:{
         computed: 'getByArray(by)'
@@ -138,6 +139,12 @@
 
       }
     },*/
+/**
+ * turns to comma separated value into an array.
+ *
+ * @param {String} by The comma separated value 
+ * @return {Array} of {String} what is to be filtered by.
+ */
     getByArray: function(by) {
       return by.split(',');
     },
