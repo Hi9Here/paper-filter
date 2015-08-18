@@ -1,6 +1,6 @@
 {
   "name": "paper-filter",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "homepage": "https://github.com/HackITtoday/paper-filter",
   "description": "Polymer 1.0 paper-filter for filtering a Array of Objects with common properties.",
   "main": "paper-filter.html",
