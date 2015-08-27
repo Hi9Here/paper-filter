@@ -21,6 +21,6 @@
   ],
   "dependencies": {
     "polymer": "^1.1.0",
-    "paper-button": "PolymerElements/paper-button#~1.0.3"
+    "paper-button": "PolymerElements/paper-button"
   }
 }
