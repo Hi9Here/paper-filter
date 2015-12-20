@@ -8,7 +8,7 @@
   <body>
     <h3>paper-filter Demo</h3>
     <template is="dom-bind">
-      <paper-filter data='[{name:"a",type:"v"},{name:"b",type:"c"},{name:"c",type:"c"},{name:"d",type:"c"},{name:"e",type:"v"}]' by="type" output="{{output}}" ></paper-filter>
+      <paper-filter data='[{"name":"a","type":"v"},{"name":"b","type":"c"},{"name":"c","type":"c"},{"name":"d","type":"c"},{"name":"e","type":"v"}]' by="type" output="{{output}}" ></paper-filter>
       <template is="dom-repeat" items="{{output}}">
         index {{index}} <br />
         name  {{item.name}}
