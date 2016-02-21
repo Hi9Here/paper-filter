@@ -136,16 +136,13 @@
             if (comb.length > 0) {
               list.push(comb);
             }
-
           }
         }
-
         for (var i_2 = 0,l_2 = list.length; i_2 < l; i_2++) {
           //make data grid
           debugger;
           console.log(list[i_2]);
         }
-
       }
     },*/
 /**
@@ -203,15 +200,12 @@
           max: max
         };
       }
-
       function closistTo(numb) {
         return function(a, b) {
           return ((numb-a.num)^2) - ((numb-b.num)^2);
         }
       }
-
       result.sort(closistTo(output.length/2));
-
       return result;
     },
     ifFiltered: function(name, properties, numberPressed) {
@@ -303,7 +297,7 @@
         for (var f = 0,l = output.length; f < l; f++) {
           for (var o = 0,l = output[f].length; o < l; o++) {
             if (output[f][o] && output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
-              otherArray.push(output[0][o]) 
+              otherArray.push(output[f][o]) 
               output[f].splice(o, 1)
             }
           }
