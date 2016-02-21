@@ -247,11 +247,11 @@
       }
     },
     setFilter: function(e) {
-      var title = e.currentTarget.getAttribute('title');
-      var index = +e.currentTarget.parentElement.index;
-      var by = this.byArray[index];
-      var max = +e.currentTarget.dataMax;
-      var obj_filters = this._setFilter(title, index, by, max, this.obj_filters);
+      var title = e.currentTarget.getAttribute('title')
+      var index = +e.currentTarget.parentElement.index
+      var by = this.byArray[index]
+      var max = +e.currentTarget.dataMax
+      var obj_filters = this._setFilter(title, index, by, max, this.obj_filters, this.other) // TODO set level to redo 
       this.obj_filters = clone(obj_filters); // TODO why clone
     },
     _setFilter: function(title, index, by, max, obj_filters) {
