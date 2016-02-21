@@ -304,10 +304,14 @@
           }
           if (otherArray.length > 1) {
             var total = 0
+            var otherNames = []
+            
             for (var oi = 0,l = otherArray[f].length; oi < l; oi++) {
               total = otherArray[f][oi].num + total
+              otherNames.push(otherArray[f][oi].name)
             }
-            // output[f].push({name: other, num: total, otherArray: otherArray})
+            
+            output[f].push({name: other, num: total})
           }
         }
       }
