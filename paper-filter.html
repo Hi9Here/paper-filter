@@ -299,6 +299,7 @@
             if (output[f][o] && output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
               otherArray.push(output[f][o]) 
               output[f].splice(o, 1)
+              o=o-1
             }
           }
           if (otherArray.length > 1) {
