@@ -302,7 +302,7 @@
         var otherArray = []
         for (var f = 0,l = output.length; f < l; f++) {
           for (var o = 0,l = output[f].length; o < l; o++) {
-            if (output[f][o].num < min) {
+            if (output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
               otherArray.push(output[0][o]) 
               output[f].splice(o, 1)
             }
