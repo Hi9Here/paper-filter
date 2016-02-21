@@ -300,15 +300,24 @@
       //TODO clear not showing filters
       if (min > 1) {
         var otherArray = []
-        for (var o = 0,l = output[0].length; o < l; o++) {
-          if (output[0][o].num < min) {
-            otherArray.push(output[0][o]) 
-            output[0].splice(o, 1)
+        for (var f = 0,l = output.length; f < l; f++) {
+          for (var o = 0,l = output[f].length; o < l; o++) {
+            if (output[0][o].num < min) {
+              otherArray.push(output[0][o]) 
+              output[0].splice(o, 1)
+            }
+          }
+          if (otherArray.length > 1) {
+            var total = 0
+            for (var o = 0,l = otherArray[f].length; o < l; o++) {
+              total = otherArray[f][o].num + total
+            }
+            output[f].push({name: other, num: total, otherArray: otherArray})
           }
         }
       }
-      this.render();
-      return output;
+      this.render()
+      return output
     },
     render: function (o) {
       var f = document.querySelectorAll('template.filter');
