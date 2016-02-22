@@ -87,12 +87,12 @@
     is: 'paper-filter',
     properties:{
       filters:{
-        computed: 'getFilters(data, byArray, obj_filters, min, other)'
+        computed: 'getFilters(_data, byArray, obj_filters, min, other)'
       },
       top_filter:{
         type: Array,
         notify: true,
-        computed: 'justProperties(data, byArray[0], 0, 0, obj_filters, byArray)'
+        computed: 'justProperties(_data, byArray[0], 0, 0, obj_filters, byArray)'
       },
       obj_filters:{
         type: Object,
@@ -112,7 +112,10 @@
       },
       output: {
         notify: true,
-        computed: 'justOfTypes(data, obj_filters)'
+        computed: 'justOfTypes(_data, obj_filters)'
+      },
+      _data: {
+        computed: 'get_data(data, min, other, byArray)'
       },
       data:Array//,
 //      dataGrid:{
