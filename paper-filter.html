@@ -112,7 +112,7 @@
       },
       output: {
         notify: true,
-        computed: 'justOfTypes(data,obj_filters)'
+        computed: 'justOfTypes(data, obj_filters)'
       },
       data:Array//,
 //      dataGrid:{
@@ -151,6 +151,35 @@
  * @param {String} by The comma separated value
  * @return {Array} of {String} what is to be filtered by.
  */
+    get_data: function(data, min, other, byArray) {
+      if (min > 1) {
+        var types = []
+        
+        for (var indexOfBy = 0,l = byArray.length; indexOfBy < l; indexOfBy++) {
+          var filter = this.justProperties(data, byArray[indexOfBy], numberPressed[indexOfBy], indexOfBy, obj_filters, byArray)
+          types.push(filter)
+        }
+        
+        var otherArray = []
+        for (var indexOfTypes = 0, typesLength = types.length; indexOfTypes < typesLength; indexOfTypes++) {
+          if (types[indexOfTypes]) {
+            otherArray[indexOfTypes] = []
+            for (var indexOfInnerTypes = 0,innerTypeLength = types[indexOfTypes].length; indexOfInnerTypes < innerTypeLength; indexOfInnerTypes++) {
+              if (types[indexOfTypes][indexOfInnerTypes] && types[indexOfTypes][indexOfInnerTypes].hasOwnProperty('num') && types[indexOfTypes][indexOfInnerTypes].num < min) {
+                otherArray[indexOfTypes].push(types[indexOfTypes][indexOfInnerTypes]) 
+                types[indexOfTypes].splice(indexOfInnerTypes, 1)
+                indexOfInnerTypes=indexOfInnerTypes-1
+              }
+            }
+          }
+        }
+        // find otherArray types and replace with other
+        debugger
+        return data
+      } else {
+        return data
+      }
+    },
     getByArray: function(by) {
       return by.split(',');
     },
@@ -177,16 +206,16 @@
           } else {
             outputNum[output.indexOf(entryA)]++;
           }
-        };
+        }
         for (var i = 0, l = data.length; i < l; i++) {
-          if (data[i][properties] === undefined) continue;
+          if (data[i][properties] === undefined) continue
           if (Array.isArray(data[i][properties])) {
             for (var b = 0, c = data[i][properties].length; b < c; b++) {
-              test(data[i][properties][b]);
+              test(data[i][properties][b])
             }
             if (max < c) { max = c }
           } else {
-            test(data[i][properties]);
+            test(data[i][properties])
             max = 1
           }
         }
@@ -206,43 +235,44 @@
         }
       }
       result.sort(closistTo(output.length/2));
-      return result;
+      return result
     },
     ifFiltered: function(name, properties, numberPressed) {
       if (numberPressed == 0) {
-        return false;
+        return false
       }
       if (this.obj_filters.hasOwnProperty(properties)) {
         if (this.obj_filters[properties].hasOwnProperty(name)) {
-          return this.obj_filters[properties][name];
+          return this.obj_filters[properties][name]
         } else {
-          return false;
+          return false
         }
       } else {
-        return false;
+        return false
       }
     },
     justOfTypes: function(data, obj_filters){
+      
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
         obj_filters = obj_filters.base;
       }
       var totalPressed = 0;
       for (by in obj_filters) {
-        totalPressed = totalPressed + Object.keys(obj_filters[by]).length;
+        totalPressed = totalPressed + Object.keys(obj_filters[by]).length
       }
       if (data === null || data === undefined) {
-        return [];
+        return []
       }
       if (totalPressed === 0) return data
       if (obj_filters === undefined || isEmpty(obj_filters)) { // no filtering needed
-        return data;
+        return data
       } else {
-        var output = [];
+        var output = []
         for (var entry = 0, l = data.length; entry < l; entry++) {
           if (hasTypes(data[entry],obj_filters)) { // This is the filter
             output.push(data[entry]);
           }
-        };
+        }
         return output;
       }
     },
@@ -252,15 +282,7 @@
       var by = this.byArray[index]
       var max = +e.currentTarget.dataMax
       var obj_filters
-      if (this.other === title && this.min > 1 && this.otherArray.length) {
-        for (var indexOtherArray = 0,lengthOtherArray = this.otherArray.length; indexOtherArray < lengthOtherArray; indexOtherArray++) { 
-          for (var indexInnerOtherArray = 0,lengthInnerOtherArray = this.otherArray[indexOtherArray].length; indexInnerOtherArray < lengthInnerOtherArray; indexInnerOtherArray++) { 
-            obj_filters = this._setFilter(this.otherArray[indexOtherArray][indexInnerOtherArray].name, index, by, max, this.obj_filters)
-          }
-        }
-      } else {
-        obj_filters = this._setFilter(title, index, by, max, this.obj_filters)
-      }
+      obj_filters = this._setFilter(title, index, by, max, this.obj_filters)
       this.obj_filters = clone(obj_filters); // TODO why clone
     },
     _setFilter: function(title, index, by, max, obj_filters) {
@@ -300,41 +322,8 @@
         var filter = this.justProperties(data, byArray[indexOfBy], numberPressed[indexOfBy], indexOfBy, obj_filters, byArray)
         output.push(filter)
       }
-      //TODO clear not showing filters
-      if (min > 1) {
-        var otherArray = []
-        for (var indexOfOutput = 0, outputLength = output.length; indexOfOutput < outputLength; indexOfOutput++) {
-          if (output[indexOfOutput]) {
-            otherArray[indexOfOutput] = []
-            for (var indexInnerOutput = 0,innerOutputLength = output[indexOfOutput].length; indexInnerOutput < innerOutputLength; indexInnerOutput++) {
-              if (output[indexOfOutput][indexInnerOutput] && output[indexOfOutput][indexInnerOutput].hasOwnProperty('num') && output[indexOfOutput][indexInnerOutput].num < min) {
-                otherArray[indexOfOutput].push(output[indexOfOutput][indexInnerOutput]) 
-                output[indexOfOutput].splice(indexInnerOutput, 1)
-                indexInnerOutput=indexInnerOutput-1
-              }
-            }
-            if (otherArray[indexOfOutput].length > 1) {
-              var total = 0
-              var indexOfOther = 0
-              
-              for (indexOfOther = 0, lengthOfInnerOtherArray = otherArray[indexOfOutput].length; indexOfOther < lengthOfInnerOtherArray; indexOfOther++) {
-                total = otherArray[indexOfOutput][indexOfOther].num + total
-              }
-              output[indexOfOutput].push({name: other, num: total})
-            }
-          }
-        }
-        this.otherArray = otherArray
-      }
-      // this.render()
       
       return output
-    },
-    render: function (o) {
-      var f = document.querySelectorAll('template.filter');
-      for (var i = 0, l = f.length; i < l; i++) {
-        f[i].render();
-      };
     }
   });
   function clone(obj) {
