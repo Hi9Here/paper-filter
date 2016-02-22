@@ -159,7 +159,7 @@
         var types = []
         
         for (var indexOfBy = 0,l = byArray.length; indexOfBy < l; indexOfBy++) {
-          var filter = this.justProperties(data, byArray[indexOfBy], numberPressed[indexOfBy], indexOfBy, obj_filters, byArray)
+          var filter = this.justProperties(data, byArray[indexOfBy], 0, indexOfBy, {}, byArray)
           types.push(filter)
         }
         
