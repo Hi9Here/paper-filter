@@ -254,7 +254,9 @@
       var obj_filters
       if (this.other === title && this.min > 1 && this.otherArray.length) {
         for (var indexOtherArray = 0,lengthOtherArray = this.otherArray.length; indexOtherArray < lengthOtherArray; indexOtherArray++) { 
-          obj_filters = this._setFilter(this.otherArray[indexOtherArray].name, index, by, max, this.obj_filters)
+          for (var indexInnerOtherArray = 0,lengthInnerOtherArray = this.otherArray[indexOtherArray].length; indexInnerOtherArray < lengthInnerOtherArray; indexInnerOtherArray++) { 
+            obj_filters = this._setFilter(this.otherArray[indexOtherArray][indexInnerOtherArray].name, index, by, max, this.obj_filters)
+          }
         }
       } else {
         obj_filters = this._setFilter(title, index, by, max, this.obj_filters)
