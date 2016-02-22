@@ -294,14 +294,14 @@
       //TODO clear not showing filters
       if (min > 1) {
         var otherArray = []
-        for (var indexOfOutput = 0,l = output.length; indexOfOutput < l; indexOfOutput++) {
+        for (var indexOfOutput = 0, outputLength = output.length; indexOfOutput < outputLength; indexOfOutput++) {
           if (output[indexOfOutput]) {
             otherArray[indexOfOutput] = []
-            for (var o = 0,l = output[indexOfOutput].length; o < l; o++) {
-              if (output[indexOfOutput][o] && output[indexOfOutput][o].hasOwnProperty('num') && output[indexOfOutput][o].num < min) {
-                otherArray[indexOfOutput].push(output[indexOfOutput][o]) 
-                output[indexOfOutput].splice(o, 1)
-                o=o-1
+            for (var indexInnerOutput = 0,innerOutputLength = output[indexOfOutput].length; indexInnerOutput < innerOutputLength; indexInnerOutput++) {
+              if (output[indexOfOutput][indexInnerOutput] && output[indexOfOutput][indexInnerOutput].hasOwnProperty('num') && output[indexOfOutput][indexInnerOutput].num < min) {
+                otherArray[indexOfOutput].push(output[indexOfOutput][indexInnerOutput]) 
+                output[indexOfOutput].splice(indexInnerOutput, 1)
+                indexInnerOutput=indexInnerOutput-1
               }
             }
             if (otherArray[indexOfOutput].length > 1) {
@@ -309,7 +309,7 @@
               var otherNames = []
               var indexOfOther = 0
               
-              for (indexOfOther = 0,l = otherArray[indexOfOutput].length; indexOfOther < l; indexOfOther++) {
+              for (indexOfOther = 0, lengthOfInnerOtherArray = otherArray[indexOfOutput].length; indexOfOther < lengthOfInnerOtherArray; indexOfOther++) {
                 total = otherArray[indexOfOutput][indexOfOther].num + total
                 otherNames.push(otherArray[indexOfOutput][indexOfOther].name)
               }
