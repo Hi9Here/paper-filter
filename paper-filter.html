@@ -224,7 +224,7 @@
     },
     justOfTypes: function(data, obj_filters){
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
-        obj_filters = obj_filters.value;
+        obj_filters = obj_filters.base;
       }
       var totalPressed = 0;
       for (by in obj_filters) {
@@ -251,7 +251,14 @@
       var index = +e.currentTarget.parentElement.index
       var by = this.byArray[index]
       var max = +e.currentTarget.dataMax
-      var obj_filters = this._setFilter(title, index, by, max, this.obj_filters) // TODO set level to redo 
+      var obj_filters
+      if (this.other === title && this.min > 1 && this.otherArray.length) {
+        for (var indexOtherArray = 0,lengthOtherArray = this.otherArray.length; indexOfBy < lengthOtherArray; indexOfBy++) { 
+          obj_filters = this._setFilter(this.otherArray[indexOtherArray].name, index, by, max, this.obj_filters)
+        }
+      } else {
+        obj_filters = this._setFilter(title, index, by, max, this.obj_filters)
+      }
       this.obj_filters = clone(obj_filters); // TODO why clone
     },
     _setFilter: function(title, index, by, max, obj_filters) {
@@ -306,20 +313,19 @@
             }
             if (otherArray[indexOfOutput].length > 1) {
               var total = 0
-              var otherNames = []
               var indexOfOther = 0
               
               for (indexOfOther = 0, lengthOfInnerOtherArray = otherArray[indexOfOutput].length; indexOfOther < lengthOfInnerOtherArray; indexOfOther++) {
                 total = otherArray[indexOfOutput][indexOfOther].num + total
-                otherNames.push(otherArray[indexOfOutput][indexOfOther].name)
               }
-  
-              output[indexOfOutput].push({name: other, num: total, otherNames: otherNames})
+              output[indexOfOutput].push({name: other, num: total})
             }
           }
         }
+        this.otherArray = otherArray
       }
       // this.render()
+      
       return output
     },
     render: function (o) {
