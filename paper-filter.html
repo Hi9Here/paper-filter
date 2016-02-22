@@ -169,15 +169,16 @@
             otherArray[indexOfTypes] = []
             for (var indexOfInnerTypes = 0,innerTypeLength = types[indexOfTypes].length; indexOfInnerTypes < innerTypeLength; indexOfInnerTypes++) {
               if (types[indexOfTypes][indexOfInnerTypes] && types[indexOfTypes][indexOfInnerTypes].hasOwnProperty('num') && types[indexOfTypes][indexOfInnerTypes].num < min) {
-                otherArray[indexOfTypes].push(types[indexOfTypes][indexOfInnerTypes]) 
-                types[indexOfTypes].splice(indexOfInnerTypes, 1)
-                indexOfInnerTypes=indexOfInnerTypes-1
+                for (var indexOfdata = 0, dataLength = data.length; indexOfdata < dataLength; indexOfdata++) {
+                  debugger
+                  if (data[indexOfdata][byArray[indexOfTypes]] === types[indexOfTypes][indexOfInnerTypes].name) {
+                    data[indexOfdata][byArray[indexOfTypes]] = other
+                  }
+                }
               }
             }
           }
         }
-        // find otherArray types and replace with other
-        debugger
         return data
       } else {
         return data
