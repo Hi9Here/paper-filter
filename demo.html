@@ -1,18 +1,56 @@
 <!doctype html>
 <html>
   <head>
-    <title>paper-filter demo</title>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="paper-filter.html">
+    <title>open-elements paper-filter demo</title>
+    <script>window.onerror = function (errorMsg, url, line) {document.write('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + line)}</script>
   </head>
   <body>
-    <h3>paper-filter Demo</h3>
-    <template is="dom-bind">
-      <paper-filter data='[{"name":"a","type":"v"},{"name":"b","type":"c"},{"name":"c","type":"c"},{"name":"d","type":"c"},{"name":"e","type":"v"}]' by="type" output="{{output}}" ></paper-filter>
-      <template is="dom-repeat" items="{{output}}">
-        index {{index}} <br />
-        name  {{item.name}}
-      </template>
-    </template>
+    <h3>open-elements Demo</h3>
+    <open-elements></open-elements>
   </body>
 </html>
+
+<link rel="import" href="../paper-filter/paper-filter.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<!--
+`<open-elements>` 
+@demo demo.html
+
+https://github.com/marcus7777/pair-production/edit/master/pair-production.html
+
+-->
+
+<dom-module id="open-elements">
+  <template>
+    <iron-ajax auto url="/list-of-elements" handle-as="text" last-response="{{list}}"></iron-ajax>
+    <paper-filter show-numbers="true" min="2" data="{{data}}" by="group" output="{{output}}"></paper-filter>
+    <template is="dom-repeat" items="{{output}}">
+      <paper-card heading="{{item.name}}"></paper-card>
+    </template>
+    <template is="dom-if" if="{{docsFor}}" >
+      <iframe sandbox="allow-scripts allow-same-origin" height="300" style="margin:0; width:100%; border:none;" src="{{_docsSrc(docsFor,_listOfElements)}}"></iframe>
+    </template>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: "open-elements",
+    properties: {
+      data: {computed:'getData(list)'},
+    },
+    getData: function(list) {
+      var output = []
+      var elements = list.split('\n')
+      for (var i = 0; i < elements.length; ++i) {
+        var path = elements[i].split('/')
+        var file = path.pop()
+        var folder =  path.pop()
+        if (file.indexOf("-") !== -1 && file === folder + ".html" ) {
+          output.push({group:file.slice(0, file.indexOf("-")), name: file.replace(".html","")})
+        }
+      }
+      return output
+    }
+  });
+</script>
