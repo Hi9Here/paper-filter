@@ -295,24 +295,26 @@
       if (min > 1) {
         var otherArray = []
         for (var f = 0,l = output.length; f < l; f++) {
-          otherArray[f] = []
-          for (var o = 0,l = output[f].length; o < l; o++) {
-            if (output[f][o] && output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
-              otherArray[f].push(output[f][o]) 
-              output[f].splice(o, 1)
-              o=o-1
+          if (output[f]) {
+            otherArray[f] = []
+            for (var o = 0,l = output[f].length; o < l; o++) {
+              if (output[f][o] && output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
+                otherArray[f].push(output[f][o]) 
+                output[f].splice(o, 1)
+                o=o-1
+              }
             }
-          }
-          if (otherArray[f].length > 1) {
-            var total = 0
-            var otherNames = []
-            
-            for (var oi = 0,l = otherArray[f].length; oi < l; oi++) {
-              total = otherArray[f][oi].num + total
-              otherNames.push(otherArray[f][oi].name)
+            if (otherArray[f].length > 1) {
+              var total = 0
+              var otherNames = []
+              
+              for (var oi = 0,l = otherArray[f].length; oi < l; oi++) {
+                total = otherArray[f][oi].num + total
+                otherNames.push(otherArray[f][oi].name)
+              }
+  
+              output[f].push({name: other, num: total, otherNames: otherNames})
             }
-            
-            output[f].push({name: other, num: total, otherNames: otherNames})
           }
         }
       }
