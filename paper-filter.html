@@ -184,7 +184,7 @@
             for (var b = 0, c = data[i][properties].length; b < c; b++) {
               test(data[i][properties][b]);
             }
-            if (max < c) { max = c; }
+            if (max < c) { max = c }
           } else {
             test(data[i][properties]);
             max = 1
@@ -287,33 +287,34 @@
       var output = []
       var numberPressed = []
 
-      for (var i = 0,l = byArray.length; i < l; i++) {
-        var filter = this.justProperties(data, byArray[i], numberPressed[i], i, obj_filters, byArray)
+      for (var indexOfBy = 0,l = byArray.length; indexOfBy < l; indexOfBy++) {
+        var filter = this.justProperties(data, byArray[indexOfBy], numberPressed[indexOfBy], indexOfBy, obj_filters, byArray)
         output.push(filter)
       }
       //TODO clear not showing filters
       if (min > 1) {
         var otherArray = []
-        for (var f = 0,l = output.length; f < l; f++) {
-          if (output[f]) {
-            otherArray[f] = []
-            for (var o = 0,l = output[f].length; o < l; o++) {
-              if (output[f][o] && output[f][o].hasOwnProperty('num') && output[f][o].num < min) {
-                otherArray[f].push(output[f][o]) 
-                output[f].splice(o, 1)
+        for (var indexOfOutput = 0,l = output.length; indexOfOutput < l; indexOfOutput++) {
+          if (output[indexOfOutput]) {
+            otherArray[indexOfOutput] = []
+            for (var o = 0,l = output[indexOfOutput].length; o < l; o++) {
+              if (output[indexOfOutput][o] && output[indexOfOutput][o].hasOwnProperty('num') && output[indexOfOutput][o].num < min) {
+                otherArray[indexOfOutput].push(output[indexOfOutput][o]) 
+                output[indexOfOutput].splice(o, 1)
                 o=o-1
               }
             }
-            if (otherArray[f].length > 1) {
+            if (otherArray[indexOfOutput].length > 1) {
               var total = 0
               var otherNames = []
+              var indexOfOther = 0
               
-              for (var oi = 0,l = otherArray[f].length; oi < l; oi++) {
-                total = otherArray[f][oi].num + total
-                otherNames.push(otherArray[f][oi].name)
+              for (indexOfOther = 0,l = otherArray[indexOfOutput].length; indexOfOther < l; indexOfOther++) {
+                total = otherArray[indexOfOutput][indexOfOther].num + total
+                otherNames.push(otherArray[indexOfOutput][indexOfOther].name)
               }
   
-              output[f].push({name: other, num: total, otherNames: otherNames})
+              output[indexOfOutput].push({name: other, num: total, otherNames: otherNames})
             }
           }
         }
