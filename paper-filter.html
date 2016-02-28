@@ -242,7 +242,13 @@ To use
             output.push(data[entry]);
           }
         }
-        return output;
+        if (output.length) {
+          return output
+        } else {
+          by = Object.keys(obj_filters)
+          delete(obj_filters[by.pop()])
+          return this.justOfTypes(data, obj_filters)
+        }
       }
     },
     setFilter: function(e) {
