@@ -1,4 +1,16 @@
 <link rel="import" href="../paper-button/paper-button.html">
+/*
+### [Video](https://youtu.be/WrCGgaq62bc)
+
+To use 
+```
+<paper-filter
+  data="{{data}}"
+  by="type,subtype"
+  output="{{output}}" >
+</paper-filter>
+```
+*/
 <dom-module id='paper-filter'>
   <style>
     :host {
@@ -117,37 +129,7 @@
       _data: {
         computed: 'get_data(data, min, other, byArray)'
       },
-      data:Array//,
-//      dataGrid:{
-//        type:Object,
-//        computed: 'getDataGrid(data,byArray)'
-//      },
-    },
-/*    getDataGrid: function(data,byArray) {// not used for later if speed is needed
-      var obj_filter = {};
-      for (var i = 0,l = byArray.length; i < l; i++) {
-        var by = byArray[i];
-        var list = [];
-        var filters = this.getFilters(data,byArray,{});
-        obj_filter[by] = {};
-       // debugger;
-        for (var i_2 = 0,l_2 = filters.length; i_2 < l_2; i_2++) {
-          var filter = filters[i_2];
-          for (var i_3 = 0,l_3 = filter.length; i_3 < l_3; i_3++) {
-            obj_filter = this._setFilter(filters[i_2][i_3].name, i, by, filters[i_2][i_3].max, obj_filter);
-            comb = this.justOfTypes(data, obj_filter);
-            if (comb.length > 0) {
-              list.push(comb);
-            }
-          }
-        }
-        for (var i_2 = 0,l_2 = list.length; i_2 < l; i_2++) {
-          //make data grid
-          debugger;
-          console.log(list[i_2]);
-        }
-      }
-    },*/
+      data:Array
 /**
  * turns to comma separated value into an array.
  *
@@ -157,12 +139,10 @@
     get_data: function(data, min, other, byArray) {
       if (min > 1) {
         var types = []
-        
         for (var indexOfBy = 0,l = byArray.length; indexOfBy < l; indexOfBy++) {
           var filter = this.justProperties(data, byArray[indexOfBy], 0, indexOfBy, {}, byArray)
           types.push(filter)
         }
-        
         var otherArray = []
         for (var indexOfTypes = 0, typesLength = types.length; indexOfTypes < typesLength; indexOfTypes++) {
           if (types[indexOfTypes]) {
@@ -233,12 +213,6 @@
           max: max
         };
       }
-      /* function closistTo(numb) {
-        return function(a, b) {
-          return ((numb-a.num)^2) - ((numb-b.num)^2);
-        }
-      }
-      result.sort(closistTo(output.length/2)); */
       return result
     },
     ifFiltered: function(name, properties, numberPressed) {
@@ -256,7 +230,6 @@
       }
     },
     justOfTypes: function(data, obj_filters){
-      
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
         obj_filters = obj_filters.base;
       }
