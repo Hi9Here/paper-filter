@@ -36,7 +36,7 @@
   <template>
     <template is="dom-repeat" items="{{filters}}">
       <div index="{{index}}">
-        <template is="dom-repeat" items="{{item}}" class="filter">
+        <template is="dom-repeat" items="{{item}}" class="filter" sort="sort">
           <paper-button raised="{{!item.filtered}}" on-tap="setFilter" data-max="{{item.max}}" title="{{item.name}}">
             <span>{{item.name}}</span>
             <template is="dom-if" if="{{showNumbers}}">
@@ -233,12 +233,12 @@
           max: max
         };
       }
-      function closistTo(numb) {
+      /* function closistTo(numb) {
         return function(a, b) {
           return ((numb-a.num)^2) - ((numb-b.num)^2);
         }
       }
-      result.sort(closistTo(output.length/2));
+      result.sort(closistTo(output.length/2)); */
       return result
     },
     ifFiltered: function(name, properties, numberPressed) {
@@ -328,6 +328,25 @@
       }
       
       return output
+    },
+    sort: function(a,b) {
+      if (a && b) {
+        if (a.num< b.num) {
+          return 1
+        }
+        if (a.num > b.num) {
+          return -1
+        }
+        
+        if (a.name  < b.name ) {
+          return -1
+        }
+        if (a.name > b.name) {
+          return 1
+        }
+        
+        return 0
+      }
     }
   });
   function clone(obj) {
