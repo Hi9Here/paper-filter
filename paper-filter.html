@@ -247,6 +247,7 @@ To use
         } else {
           by = Object.keys(obj_filters)
           delete(obj_filters[by.pop()])
+          this.set("obj_filters",obj_filters)
           return this.justOfTypes(data, obj_filters)
         }
       }
