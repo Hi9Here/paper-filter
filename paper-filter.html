@@ -45,14 +45,16 @@ To use
   <template>
     <template is="dom-repeat" items="{{filters}}">
       <div index="{{index}}">
-        <template is="dom-repeat" items="{{item}}" class="filter" sort="sort">
-          <paper-button raised="{{!item.filtered}}" on-tap="setFilter" data-max="{{item.max}}" title="{{item.name}}">
-            <span>{{item.name}}</span>
-            <template is="dom-if" if="{{showNumbers}}">
-              <span class="mini-badge">{{item.num}}</span>
-            </template>
-          </paper-button>
-        </template>
+        <template is="dom-if" if="{{gtOne(item.length)}}">
+          <template is="dom-repeat" items="{{item}}" class="filter" sort="sort">
+            <paper-button raised="{{!item.filtered}}" on-tap="setFilter" data-max="{{item.max}}" title="{{item.name}}">
+              <span>{{item.name}}</span>
+              <template is="dom-if" if="{{showNumbers}}">
+                <span class="mini-badge">{{item.num}}</span>
+              </template>
+            </paper-button>
+          </template>
+        </template> 
       </div>
     </template>
   </template>
@@ -300,6 +302,9 @@ To use
       }
       
       return output
+    },
+    gtOne: function(a) {
+      return a > 1 
     },
     sort: function(a,b) {
       if (a && b) {
