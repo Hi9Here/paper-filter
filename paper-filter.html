@@ -123,7 +123,7 @@ To use
       },
       output: {
         notify: true,
-        computed: 'justOfTypes(_data, obj_filters)'
+        computed: 'justOfTypes(_data, obj_filters, byArray)'
       },
       _data: {
         computed: 'get_data(data, min, other, byArray)'
@@ -176,7 +176,7 @@ To use
             _obj_filters[byArray[i]] = obj_filters[byArray[i]];
           }
         }
-        data = this.justOfTypes(data, _obj_filters);// TODO if all are in a filter set it as true
+        data = this.justOfTypes(data, _obj_filters, byArray);// TODO if all are in a filter set it as true
         var test = function(entryA) {
           if (output.indexOf(entryA) === -1) {
             output.push(entryA);
@@ -223,7 +223,7 @@ To use
         return false
       }
     },
-    justOfTypes: function(data, obj_filters){
+    justOfTypes: function(data, obj_filters, byArray){
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
         obj_filters = obj_filters.base;
       }
@@ -247,10 +247,8 @@ To use
         if (output.length) {
           return output
         } else {
-          by = Object.keys(obj_filters)
-          delete(obj_filters[by.shift()])
-          this.set("obj_filters",obj_filters)
-          return this.justOfTypes(data, obj_filters)
+          delete(obj_filters[byArray.pop()])
+          return this.justOfTypes(data, obj_filters, byArray)
         }
       }
     },
