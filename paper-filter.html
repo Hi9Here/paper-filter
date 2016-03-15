@@ -163,9 +163,10 @@ To use
         obj_filters = obj_filters.value;
       }
       levels = []
-      for (var a = 0, x = by.split(',').length; a < x; a++) {
-        if (a === 0 || obj_filters.hasOwnProperty[by.split(',')[a-1]]) {
-          levels.push(by.split(',')[a])
+      byArray = by.split(',')
+      for (var a = 0, x = byArray.length; a < x; a++) {
+        if (a === 0 || obj_filters.hasOwnProperty[byArray[a-1]]) {
+          levels.push(byArray[a])
           debugger
         }
       }
