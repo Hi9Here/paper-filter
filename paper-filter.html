@@ -164,7 +164,10 @@ To use
       }
       levels = []
       for (var a = 0, x = by.split(',').length; a < x; a++) {
-        if (a === 0 || obj_filters.hasOwnProperty[by.split(',')[a-1]]) levels.push(by.split(',')[a])
+        if (a === 0 || obj_filters.hasOwnProperty[by.split(',')[a-1]]) {
+          levels.push(by.split(',')[a])
+          debugger
+        }
       }
       return levels
     },
