@@ -165,13 +165,10 @@ To use
       levels = []
       byArray = by.split(',')
       for (var a = 0, x = byArray.length; a < x; a++) {
-        if (a === 0 || obj_filters.hasOwnProperty[byArray[a-1]]) {
+        if (a === 0 || !!obj_filters[byArray[a-1]]) {
           levels.push(byArray[a])
-          debugger
         }
-        debugger
       }
-      debugger
       return levels
     },
     justProperties: function(data, properties, numberPressed, index, obj_filters, byArray) {
