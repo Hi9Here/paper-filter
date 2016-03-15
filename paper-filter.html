@@ -113,7 +113,7 @@ To use
       /* by The comma separated value */
       by:String,
       byArray: {
-        computed: 'getByArray(by)'
+        computed: 'getByArray(by, obj_filters)'
       },
       other: {
         type: String, value: "Other"
@@ -158,8 +158,12 @@ To use
         return data
       }
     },
-    getByArray: function(by) {
-      return by.split(',');
+    getByArray: function(by, obj_filters) {
+      levels = []
+      for (var a = 0, x = by.split(',').length; a < x; a++) {
+        if (a === 0 || obj_filters.hasOwnProperty[by.split(',')[a-1]]) levels.push(by.split(',')[a])
+      }
+      return levels
     },
     justProperties: function(data, properties, numberPressed, index, obj_filters, byArray) {
       if (obj_filters.hasOwnProperty('base') && obj_filters.hasOwnProperty('path') && obj_filters.hasOwnProperty('value')) {
